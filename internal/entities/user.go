@@ -37,5 +37,4 @@ type CreateUserRequest struct {
 
 type UserUsecase interface {
 	CreateUser(ctx context.Context, req CreateUserRequest) (user *User, err error)
-	GetByEmail(ctx context.Context, email string) (user *User, err error)
 }
