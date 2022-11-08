@@ -2,7 +2,10 @@ module github.com/resyahrial/go-template
 
 go 1.18
 
-require github.com/sirupsen/logrus v1.9.0
+require (
+	github.com/golang/mock v1.6.0
+	github.com/sirupsen/logrus v1.9.0
+)
 
 require (
 	github.com/BurntSushi/toml v1.1.0 // indirect

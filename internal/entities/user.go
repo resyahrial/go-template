@@ -15,15 +15,13 @@ type User struct {
 
 type UserOption func(*User) error
 
-func NewUser(input CreateUserRequest, opts ...UserOption) (user *User, errs []error) {
-	if err := mapstructure.Decode(input, &user); err != nil {
-		errs = append(errs, err)
+func NewUser(input CreateUserRequest, opts ...UserOption) (user *User, err error) {
+	if err = mapstructure.Decode(input, &user); err != nil {
 		return
 	}
 
 	for _, opt := range opts {
-		if err := opt(user); err != nil {
-			errs = append(errs, err)
+		if err = opt(user); err != nil {
 			return
 		}
 	}
