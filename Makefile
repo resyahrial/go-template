@@ -17,6 +17,3 @@ run-dev:
 wire-inject:
 	cd internal/factory; \
 	wire
-
-swagger-generate:
-	swagger generate server --name GoTemplate --spec swagger.yaml -t internal/api
