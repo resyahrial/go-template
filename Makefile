@@ -13,3 +13,7 @@ ci-golangci-lint-report:
 
 run-dev:
 	go run ./cmd/app-http/*.go -env=dev
+	
+wire-inject:
+	cd internal/factory; \
+	wire

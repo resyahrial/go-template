@@ -30,6 +30,7 @@ require (
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/google/wire v0.5.0
 	github.com/ilyakaznacheev/cleanenv v1.3.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/segmentio/ksuid v1.0.4
