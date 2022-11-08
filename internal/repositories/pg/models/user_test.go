@@ -26,7 +26,9 @@ func TestNewUserModel(t *testing.T) {
 
 func TestConvertToEntityUser(t *testing.T) {
 	user := &models.User{
-		Id:       ksuid.New().String(),
+		CommonField: models.CommonField{
+			Id: ksuid.New().String(),
+		},
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",

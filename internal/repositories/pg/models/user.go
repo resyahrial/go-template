@@ -10,7 +10,7 @@ import (
 )
 
 type User struct {
-	Id       string
+	CommonField
 	Name     string
 	Email    string
 	Password string
@@ -27,6 +27,7 @@ func (u *User) ConvertToEntity() (userEntity *entities.User, err error) {
 	if err = mapstructure.Decode(u, &userEntity); err != nil {
 		return
 	}
+	userEntity.Id = u.Id
 	return
 }
 
