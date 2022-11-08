@@ -36,11 +36,12 @@ func (m *MockUserRepo) EXPECT() *MockUserRepoMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockUserRepo) Create(ctx context.Context, user *entities.User) error {
+func (m *MockUserRepo) Create(ctx context.Context, user *entities.User) (*entities.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, user)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret0, _ := ret[0].(*entities.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.

@@ -11,11 +11,7 @@ func (u *UserUsecaseImpl) CreateUser(ctx context.Context, req entities.CreateUse
 		return
 	}
 
-	if err = u.UserRepo.Create(ctx, user); err != nil {
-		return nil, err
-	}
-
-	return
+	return u.UserRepo.Create(ctx, user)
 }
 
 func (u *UserUsecaseImpl) GetByEmail(ctx context.Context, email string) (user *entities.User, err error) {

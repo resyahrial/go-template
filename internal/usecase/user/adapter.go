@@ -8,5 +8,5 @@ import (
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go UserRepo
 type UserRepo interface {
-	Create(ctx context.Context, user *entities.User) (err error)
+	Create(ctx context.Context, user *entities.User) (res *entities.User, err error)
 }

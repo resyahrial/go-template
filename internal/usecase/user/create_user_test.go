@@ -41,14 +41,14 @@ func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 
 	testCases := []struct {
 		name                 string
-		resultMockCreateUser entities.User
+		resultMockCreateUser *entities.User
 		errorMockCreateUser  error
 		expectedOutput       *entities.User
 		expectedError        error
 	}{
 		{
 			name: "should create user",
-			resultMockCreateUser: entities.User{
+			resultMockCreateUser: &entities.User{
 				Id:       userId,
 				Name:     "user",
 				Email:    "user@mail.com",
@@ -73,7 +73,7 @@ func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 			user, errNewUser := entities.NewUser(req)
 			s.Nil(errNewUser)
 
-			s.userRepo.EXPECT().Create(gomock.Any(), user).SetArg(1, tc.resultMockCreateUser).Return(tc.errorMockCreateUser)
+			s.userRepo.EXPECT().Create(gomock.Any(), user).Return(tc.resultMockCreateUser, tc.errorMockCreateUser)
 
 			res, err := s.ucase.CreateUser(context.Background(), req)
 			s.Equal(tc.expectedError, err)
