@@ -1,0 +1,103 @@
+swagger: "2.0"
+
+info:
+  title: Go-Template's example API spec
+  description: >-
+    Basic template for Go project
+  contact:
+    name: Rangga Syahrial
+    url: "https://github.com/resyahrial"
+    email: syahrialrangga11@gmail.com
+  version: master
+
+host: localhost:8080
+schemes:
+  - http
+  - https
+
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /v1/users:
+    post:
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/CreateUserRequest"
+      summary: create user
+      tags:
+        - User
+      operationId: createUser
+      responses:
+        "201":
+          description: user response
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          $ref: "#/responses/ErrorBadRequest"
+        default:
+          $ref: "#/responses/ErrorUnexpected"
+
+responses:
+  ErrorBadRequest:
+    description: Bad Request
+    schema:
+      $ref: "#/definitions/ErrorBadRequest"
+  ErrorUnauthorized:
+    description: Unauthorized
+    schema:
+      $ref: "#/definitions/Error"
+  ErrorUnauthanticated:
+    description: Unauthanticated
+    schema:
+      $ref: "#/definitions/Error"
+  ErrorNotFound:
+    description: Not Found
+    schema:
+      $ref: "#/definitions/Error"
+  ErrorUnexpected:
+    description: Unexpected
+    schema:
+      $ref: "#/definitions/Error"
+
+definitions:
+  CreateUserRequest:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+  ErrorBadRequest:
+    type: array
+    items:
+      type: object
+      properties:
+        field:
+          type: string
+        messages:
+          type: array
+          items:
+            type: string
+
+externalDocs:
+  description: Rangga Syahrial's linkedin
+  url: "https://www.linkedin.com/in/rangga-syahrial"
