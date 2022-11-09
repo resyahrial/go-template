@@ -33,7 +33,7 @@ func (s *CreateUserUsecaseTestSuite) SetupTest() {
 
 func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 	userId := ksuid.New().String()
-	req := entities.CreateUserRequest{
+	input := &entities.User{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",
@@ -70,12 +70,9 @@ func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
-			user, errNewUser := entities.NewUser(req)
-			s.Nil(errNewUser)
+			s.userRepo.EXPECT().Create(gomock.Any(), input).Return(tc.resultMockCreateUser, tc.errorMockCreateUser)
 
-			s.userRepo.EXPECT().Create(gomock.Any(), user).Return(tc.resultMockCreateUser, tc.errorMockCreateUser)
-
-			res, err := s.ucase.CreateUser(context.Background(), req)
+			res, err := s.ucase.CreateUser(context.Background(), input)
 			s.Equal(tc.expectedError, err)
 			if err == nil {
 				s.EqualValues(tc.expectedOutput, res)
