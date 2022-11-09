@@ -6,9 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
 
 	"github.com/resyahrial/go-template/config"
@@ -45,23 +42,9 @@ func main() {
 		log.Fatal("server failed to initialized")
 	}
 
-	go func() {
-		// run http connections
-		log.Printf("Running http server on port : %v", config.GlobalConfig.App.ServerAppPort)
-		graceful.RunHttpServer(context.Background(), &http.Server{
-			Addr:    fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
-			Handler: route.InitRoutes(serverEngine),
-		}, 10*time.Second)
-	}()
-
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	done := make(chan bool, 1)
-	go func() {
-		<-sigs
-		// worker.Shutdown()
-		done <- true
-	}()
-	<-done
-
+	log.Printf("Running http server on port : %v", config.GlobalConfig.App.ServerAppPort)
+	graceful.RunHttpServer(context.Background(), &http.Server{
+		Addr:    fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
+		Handler: route.InitRoutes(serverEngine),
+	}, 10*time.Second)
 }
