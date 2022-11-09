@@ -7,6 +7,23 @@ import (
 	// "github.com/kargotech/ltms-shipper-integration/internal/pkg/errors"
 )
 
+type Success struct {
+	StatusCode int         `json:"-"`
+	Data       interface{} `json:"data"`
+}
+
+func HandleSuccess(data interface{}) *Success {
+	return &Success{
+		StatusCode: http.StatusOK,
+		Data:       data,
+	}
+}
+
+type Failure struct {
+	StatusCode int         `json:"-"`
+	Error      interface{} `json:"error"`
+}
+
 func HandleError(c *gin.Context, err error) *Failure {
 	ginErr := c.Error(err)
 
@@ -37,12 +54,5 @@ func generateFailure(statusCode int, err error) *Failure {
 		Error: map[string]interface{}{
 			"message": err.Error(),
 		},
-	}
-}
-
-func HandleSuccess(data interface{}) *Success {
-	return &Success{
-		StatusCode: http.StatusOK,
-		Data:       data,
 	}
 }
