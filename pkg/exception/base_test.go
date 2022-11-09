@@ -1,7 +1,6 @@
 package exception_test
 
 import (
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -24,38 +23,37 @@ func (s *BaseExceptionTestSuite) TestNewBaseException() {
 	testCases := []struct {
 		name            string
 		inputStatusCode int
-		inputMessages   []string
+		inputMessage    string
+		inputModule     string
 		expectedOutput  error
 	}{
 		{
-			name: "should create base exception",
-			inputMessages: []string{
-				"internal server error",
-			},
+			name:         "should create base exception",
+			inputMessage: "internal server error",
 			expectedOutput: &exception.Base{
 				Code:    http.StatusInternalServerError,
 				Message: "internal server error",
+				Module:  exception.BaseModule,
 			},
 		},
 		{
-			name:            "should create exception with joined multiple message",
+			name:            "should create exception with module",
+			inputMessage:    "bad request",
 			inputStatusCode: http.StatusBadRequest,
-			inputMessages: []string{
-				"validate 1",
-				"validate 2",
-			},
+			inputModule:     "USER",
 			expectedOutput: &exception.Base{
 				Code:    http.StatusBadRequest,
-				Message: "validate 1, validate 2",
+				Message: "bad request",
+				Module:  "USER",
 			},
 		},
 	}
 
 	for _, tc := range testCases {
-		exc := exception.NewBaseException(tc.inputStatusCode, tc.inputMessages...)
+		exc := exception.NewBaseException(tc.inputStatusCode, tc.inputMessage).SetModule(tc.inputModule)
 		s.Run(tc.name, func() {
 			s.EqualValues(tc.expectedOutput, exc)
-			s.Equal(fmt.Sprintf("[%v]%s\n", exc.Code, exc.Message), exc.Error())
+			s.Equal(exc.Message, exc.Error())
 		})
 	}
 }
