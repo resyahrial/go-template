@@ -1,2 +1,5 @@
-rest_server:
-  name: ""
+app:
+  name: go-template
+  host: localhost
+  port: 8080
+  debug: true

@@ -14,7 +14,7 @@ const (
 
 type (
 	Config struct {
-		RestServer RestServerConfig `yaml:"rest_server"`
+		App AppConfig `yaml:"app"`
 	}
 )
 
