@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	cfgPath = "./files/etc/app_config/config.%s.yaml"
+	cfgPath = "./files/etc/app_config/config.%s.yml"
 )
 
 type (

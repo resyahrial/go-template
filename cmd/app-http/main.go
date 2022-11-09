@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/resyahrial/go-template/config"
@@ -50,5 +53,15 @@ func main() {
 			Handler: route.InitRoutes(serverEngine),
 		}, 10*time.Second)
 	}()
+
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+	done := make(chan bool, 1)
+	go func() {
+		<-sigs
+		// worker.Shutdown()
+		done <- true
+	}()
+	<-done
 
 }
