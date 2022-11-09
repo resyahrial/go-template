@@ -1,9 +1,9 @@
-package requests_test
+package request_test
 
 import (
 	"testing"
 
-	"github.com/resyahrial/go-template/internal/api/handlers/requests"
+	request "github.com/resyahrial/go-template/internal/api/handlers/requests"
 	"github.com/resyahrial/go-template/internal/entities"
 	"github.com/stretchr/testify/suite"
 )
@@ -20,7 +20,7 @@ func (s *CreateUserRequestTestSuite) SetupTest() {
 }
 
 func (s *CreateUserRequestTestSuite) TestConvertToUserEntity() {
-	createUserReq := &requests.CreateUserRequest{
+	createUserReq := &request.CreateUserRequest{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",
