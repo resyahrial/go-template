@@ -9,7 +9,7 @@ import (
 	response "github.com/resyahrial/go-template/internal/api/handlers/responses"
 )
 
-func InitGinFramework(cfg config.AppConfig) *gin.Engine {
+func InitGinEngine(cfg config.AppConfig) *gin.Engine {
 	var (
 		ginMode string
 	)
