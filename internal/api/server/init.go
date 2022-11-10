@@ -9,12 +9,12 @@ import (
 	response "github.com/resyahrial/go-template/internal/api/handlers/responses"
 )
 
-func InitGinEngine(cfg config.AppConfig) *gin.Engine {
+func InitGinEngine(cfg config.Config) *gin.Engine {
 	var (
 		ginMode string
 	)
 
-	if cfg.DebugMode {
+	if cfg.App.DebugMode {
 		ginMode = gin.DebugMode
 	} else {
 		ginMode = gin.ReleaseMode

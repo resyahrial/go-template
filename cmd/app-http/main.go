@@ -11,6 +11,7 @@ import (
 	"github.com/resyahrial/go-template/config"
 	route "github.com/resyahrial/go-template/internal/api/routes"
 	"github.com/resyahrial/go-template/internal/api/server"
+	"github.com/resyahrial/go-template/internal/repositories/pg"
 	"github.com/resyahrial/go-template/pkg/graceful"
 )
 
@@ -37,7 +38,9 @@ func main() {
 	flag.Parse()
 	config.InitConfig(appFlag.Environment)
 
-	serverEngine := server.InitGinEngine(config.GlobalConfig.App)
+	_ = pg.InitDatabase(config.GlobalConfig)
+
+	serverEngine := server.InitGinEngine(config.GlobalConfig)
 	if serverEngine == nil {
 		log.Fatal("server failed to initialized")
 	}
