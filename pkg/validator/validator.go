@@ -50,6 +50,9 @@ func translateError(data interface{}, err error, trans ut.Translator) (result ma
 
 	result = make(map[string][]string)
 	rt := reflect.TypeOf(data)
+	if rt.Kind() == reflect.Ptr {
+		rt = reflect.ValueOf(data).Elem().Type()
+	}
 	isDataStruct := rt.Kind() == reflect.Struct
 
 	validatorErrs := err.(validator_pkg.ValidationErrors)

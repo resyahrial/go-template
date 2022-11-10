@@ -72,18 +72,17 @@ func (s *ExceptionTestSuite) TestNewException() {
 	}
 
 	for _, tc := range testCases {
-		exc := exception.NewException(tc.inputStatusCode).
-			SetMessage(tc.inputMessage).
-			SetCollectionMessage(tc.inputCollectionMessage).
-			SetModule(tc.inputModule)
 
 		s.Run(tc.name, func() {
-			s.EqualValues(tc.expectedOutput, exc)
+			exc := exception.NewBaseException(tc.inputStatusCode).SetModule(tc.inputModule)
 			if len(tc.inputCollectionMessage) > 0 {
+				exc.SetCollectionMessage(tc.inputCollectionMessage)
 				s.Equal(fmt.Sprintf("%v", tc.inputCollectionMessage), exc.Error())
 			} else {
-				s.Equal(exc.Message, exc.Error())
+				exc.SetMessage(tc.inputMessage)
+				s.Equal(tc.inputMessage, exc.Error())
 			}
+			s.EqualValues(tc.expectedOutput, exc)
 		})
 	}
 }

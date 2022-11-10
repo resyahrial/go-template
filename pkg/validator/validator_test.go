@@ -24,7 +24,7 @@ type person struct {
 }
 
 func (s *ValidatorSuite) TestValidate() {
-	p := person{
+	p := &person{
 		Name:                "Joe",
 		Email:               "dummyemail",
 		Age:                 0,
