@@ -14,7 +14,8 @@ const (
 
 type (
 	Config struct {
-		App AppConfig `yaml:"app"`
+		App      AppConfig      `yaml:"app"`
+		Database DatabaseConfig `yaml:"database"`
 	}
 )
 
