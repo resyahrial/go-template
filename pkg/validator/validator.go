@@ -27,6 +27,7 @@ func init() {
 	AddCustomTag("phoneNumber", "{0} must starts with '62' and have length between 10-14 character", validatePhoneNumber)
 }
 
+// Validate accept struct and pointer struct type
 func Validate(data interface{}) map[string][]string {
 	err := Validator.Struct(data)
 	if err == nil {
@@ -43,6 +44,7 @@ func AddCustomTag(tag string, errMessage string, validationFn ValidationFn) {
 	addTranslation(tag, errMessage)
 }
 
+// translateError translate result of validation to readable format
 func translateError(data interface{}, err error, trans ut.Translator) (result map[string][]string) {
 	if err == nil {
 		return nil
@@ -76,6 +78,7 @@ func translateError(data interface{}, err error, trans ut.Translator) (result ma
 	return result
 }
 
+// addTranslation register custom translation of custom validation
 func addTranslation(tag string, errMessage string) {
 	registerFn := func(ut ut.Translator) error {
 		return ut.Add(tag, errMessage, false)
