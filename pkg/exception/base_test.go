@@ -1,6 +1,7 @@
 package exception_test
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -8,24 +9,25 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-type BaseExceptionTestSuite struct {
+type ExceptionTestSuite struct {
 	suite.Suite
 }
 
-func TestBaseException(t *testing.T) {
-	suite.Run(t, new(BaseExceptionTestSuite))
+func TestException(t *testing.T) {
+	suite.Run(t, new(ExceptionTestSuite))
 }
 
-func (s *BaseExceptionTestSuite) SetupTest() {
+func (s *ExceptionTestSuite) SetupTest() {
 }
 
-func (s *BaseExceptionTestSuite) TestNewBaseException() {
+func (s *ExceptionTestSuite) TestNewException() {
 	testCases := []struct {
-		name            string
-		inputStatusCode int
-		inputMessage    string
-		inputModule     string
-		expectedOutput  error
+		name                   string
+		inputStatusCode        int
+		inputMessage           string
+		inputCollectionMessage map[string][]string
+		inputModule            string
+		expectedOutput         error
 	}{
 		{
 			name:         "should create base exception",
@@ -47,13 +49,41 @@ func (s *BaseExceptionTestSuite) TestNewBaseException() {
 				Module:  "USER",
 			},
 		},
+
+		{
+			name: "should create exception with collection message",
+			inputCollectionMessage: map[string][]string{
+				"email": {
+					"email not valid",
+				},
+			},
+			inputStatusCode: http.StatusBadRequest,
+			inputModule:     "USER",
+			expectedOutput: &exception.Base{
+				Code: http.StatusBadRequest,
+				CollectionMessage: map[string][]string{
+					"email": {
+						"email not valid",
+					},
+				},
+				Module: "USER",
+			},
+		},
 	}
 
 	for _, tc := range testCases {
-		exc := exception.NewBaseException(tc.inputStatusCode, tc.inputMessage).SetModule(tc.inputModule)
+		exc := exception.NewException(tc.inputStatusCode).
+			SetMessage(tc.inputMessage).
+			SetCollectionMessage(tc.inputCollectionMessage).
+			SetModule(tc.inputModule)
+
 		s.Run(tc.name, func() {
 			s.EqualValues(tc.expectedOutput, exc)
-			s.Equal(exc.Message, exc.Error())
+			if len(tc.inputCollectionMessage) > 0 {
+				s.Equal(fmt.Sprintf("%v", tc.inputCollectionMessage), exc.Error())
+			} else {
+				s.Equal(exc.Message, exc.Error())
+			}
 		})
 	}
 }
