@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: ${{ env.go_version }}
-      - name: golangci-lint ${{ env.go_version }}
+      - name: golangci-lint ${{ env.golangci_version }}
         uses: golangci/golangci-lint-action@v3
         with:
-          version: ${{ env.go_version }}
+          version: ${{ env.golangci_version }}
