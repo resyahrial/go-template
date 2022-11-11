@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitUserUsecase(db *gorm.DB) (entities.UserUsecase, error) {
+func InitUserUsecase(db *gorm.DB) entities.UserUsecase {
 	wire.Build(
 		usecase.NewUserUsecase,
 		userRepoAdapterSet,
 	)
-	return nil, nil
+	return nil
 }
 
 var userRepoAdapterSet = wire.NewSet(

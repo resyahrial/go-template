@@ -25,6 +25,10 @@ func (exc *Base) Error() string {
 }
 
 func (exc *Base) LogError() {
+	if exc.CollectionMessage != nil && len(exc.CollectionMessage) != 0 {
+		log.Printf("[%s] %v", exc.Module, exc.CollectionMessage)
+		return
+	}
 	log.Printf("[%s] %s", exc.Module, exc.Message)
 }
 

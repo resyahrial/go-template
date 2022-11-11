@@ -29,7 +29,7 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.users (
     id character varying(50) NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    update_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     is_deleted boolean,
     name character varying(100) NOT NULL,
     email character varying(255) NOT NULL,

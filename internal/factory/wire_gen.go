@@ -16,10 +16,10 @@ import (
 
 // Injectors from injector.go:
 
-func InitUserUsecase(db *gorm.DB) (entities.UserUsecase, error) {
+func InitUserUsecase(db *gorm.DB) entities.UserUsecase {
 	userRepoImpl := repo.NewUserRepo(db)
 	userUsecase := usecase.NewUserUsecase(userRepoImpl)
-	return userUsecase, nil
+	return userUsecase
 }
 
 // injector.go:

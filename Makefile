@@ -10,9 +10,6 @@ ci-golangci-lint-report:
 	&& go mod download\
 	&& wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.47.1\
 	&& ./bin/golangci-lint run --out-format checkstyle --issues-exit-code 0 > golangci-lint.out
-
-run-dev:
-	go run ./cmd/app-http/*.go -env=dev
 	
 wire-inject:
 	cd internal/factory; \

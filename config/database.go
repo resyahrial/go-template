@@ -5,8 +5,8 @@ import "fmt"
 type DatabaseConfig struct {
 	DbName          string `yaml:"name" env:"DB_NAME"`
 	Host            string `yaml:"host" env:"DB_HOST" env-default:"localhost"`
-	Port            int    `yaml:"port" env:"DB_PORT" env-default:"5432"`
-	Username        string `username:"host" env:"DB_USERNAME"`
+	Port            string `yaml:"port" env:"DB_PORT" env-default:"5432"`
+	Username        string `yaml:"username" env:"DB_USERNAME"`
 	Password        string `yaml:"password" env:"DB_PASSWORD"`
 	MaxIddleConn    int    `yaml:"maxidleconn" env:"DB_MAX_IDDLE_CONN"`
 	MaxOpenConn     int    `yaml:"maxopenconn" env:"DB_MAX_OPEN_CONN"`
@@ -14,5 +14,5 @@ type DatabaseConfig struct {
 }
 
 func (config DatabaseConfig) GetDatabaseConnectionString() string {
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=UTC", config.Host, config.Username, config.Password, config.DbName, config.Port)
+	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=UTC", config.Host, config.Username, config.Password, config.DbName, config.Port)
 }

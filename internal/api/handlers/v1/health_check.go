@@ -5,7 +5,7 @@ import (
 	response "github.com/resyahrial/go-template/internal/api/handlers/responses"
 )
 
-func HealthCheckHandler(c *gin.Context) {
+func (h *Handler) HealthCheck(c *gin.Context) {
 	res := response.HandleSuccess(map[string]interface{}{
 		"message": "OK",
 	})
