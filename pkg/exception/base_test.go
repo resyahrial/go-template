@@ -76,10 +76,10 @@ func (s *ExceptionTestSuite) TestNewException() {
 		s.Run(tc.name, func() {
 			exc := exception.NewBaseException(tc.inputStatusCode).SetModule(tc.inputModule)
 			if len(tc.inputCollectionMessage) > 0 {
-				exc.SetCollectionMessage(tc.inputCollectionMessage)
+				exc = exc.SetCollectionMessage(tc.inputCollectionMessage)
 				s.Equal(fmt.Sprintf("%v", tc.inputCollectionMessage), exc.Error())
 			} else {
-				exc.SetMessage(tc.inputMessage)
+				exc = exc.SetMessage(tc.inputMessage)
 				s.Equal(tc.inputMessage, exc.Error())
 			}
 			s.EqualValues(tc.expectedOutput, exc)
