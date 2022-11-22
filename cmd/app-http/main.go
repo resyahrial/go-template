@@ -45,7 +45,6 @@ func main() {
 		log.Fatal("server failed to initialized")
 	}
 
-	log.Printf("Running http server on port : %v", config.GlobalConfig.App.ServerAppPort)
 	graceful.RunHttpServer(context.Background(), &http.Server{
 		Addr:    fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
 		Handler: route.InitRoutes(serverEngine, pg.DbInstance),
