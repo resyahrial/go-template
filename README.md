@@ -129,15 +129,12 @@ As such, our core code will be in the form of:
 |--- internal
 |    |--- api
 |    |    |--- rest
-|    |    |    |--- server
 |    |    |    |--- module A
 |    |    |    |--- module B
 |    |    |--- gql
-|    |    |    |--- server
 |    |    |    |--- module A
 |    |    |    |--- module B
 |    |    |--- grpc
-|    |    |    |--- server
 |    |    |    |--- module A
 |    |    |    |--- module B
 |    |
