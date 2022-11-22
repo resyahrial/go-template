@@ -1,4 +1,4 @@
-package user
+package request
 
 import (
 	"github.com/mitchellh/mapstructure"
@@ -13,7 +13,7 @@ type CreateUserRequest struct {
 	Password string `json:"password"`
 }
 
-func (r *CreateUserRequest) CastToUserEntity() (user *entities.User, err error) {
+func (r *CreateUserRequest) CastToEntity() (user *entities.User, err error) {
 	if mapErr := validator.Validate(r); len(mapErr) > 0 {
 		err = exception.NewBadRequestException().SetModule(entities.UserModule).SetCollectionMessage(mapErr)
 		return

@@ -1,4 +1,4 @@
-package middleware
+package middlewares
 
 import (
 	"net/http"
@@ -38,27 +38,25 @@ type failure struct {
 	ErrorMsg   interface{} `json:"err_msg"`
 }
 
-func (m *Middleware) ResponseWrapper() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Next()
+func (m *Middleware) ResponseWrapper(c *gin.Context) {
+	c.Next()
 
-		if val, ok := c.Get(FailureKey); ok {
-			if err, ok := val.(error); ok {
-				handleError(c, err)
-				return
-			}
-		}
-
-		if data, ok := c.Get(SuccessKey); ok {
-			if paginatedData, ok := c.Get(PaginatedKey); ok {
-				if parsedPaginatedData, ok := paginatedData.(PaginatedResultValue); ok {
-					handleSuccessPaginated(c, data, parsedPaginatedData)
-				}
-			} else {
-				handleSuccess(c, data)
-			}
+	if val, ok := c.Get(FailureKey); ok {
+		if err, ok := val.(error); ok {
+			handleError(c, err)
 			return
 		}
+	}
+
+	if data, ok := c.Get(SuccessKey); ok {
+		if paginatedData, ok := c.Get(PaginatedKey); ok {
+			if parsedPaginatedData, ok := paginatedData.(PaginatedResultValue); ok {
+				handleSuccessPaginated(c, data, parsedPaginatedData)
+			}
+		} else {
+			handleSuccess(c, data)
+		}
+		return
 	}
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/resyahrial/go-template/internal/entities"
-	"github.com/resyahrial/go-template/internal/repositories/pg/models"
+	"github.com/resyahrial/go-template/internal/repositories/postgresql/models"
 	"github.com/segmentio/ksuid"
 	"gorm.io/gorm"
 )

@@ -1,9 +1,9 @@
-package user_test
+package response_test
 
 import (
 	"testing"
 
-	"github.com/resyahrial/go-template/internal/api/rest/user"
+	response "github.com/resyahrial/go-template/internal/api/rest/v1/responses"
 	"github.com/resyahrial/go-template/internal/entities"
 	"github.com/stretchr/testify/suite"
 )
@@ -20,7 +20,7 @@ func (s *CreateUserResponseTestSuite) SetupTest() {
 }
 
 func (s *CreateUserResponseTestSuite) TestConvertToUserEntity() {
-	entity := &entities.User{
+	user := &entities.User{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",
@@ -28,12 +28,12 @@ func (s *CreateUserResponseTestSuite) TestConvertToUserEntity() {
 
 	testCases := []struct {
 		name           string
-		expectedOutput *user.CreateUserResponse
+		expectedOutput *response.CreateUserResponse
 		expectedError  error
 	}{
 		{
 			name: "should create basic user",
-			expectedOutput: &user.CreateUserResponse{
+			expectedOutput: &response.CreateUserResponse{
 				Name:  "user",
 				Email: "user@mail.com",
 			},
@@ -41,7 +41,7 @@ func (s *CreateUserResponseTestSuite) TestConvertToUserEntity() {
 	}
 
 	for _, tc := range testCases {
-		res, err := user.NewCreateUserResponse(entity)
+		res, err := response.NewCreateUserResponse(user)
 		s.Run(tc.name, func() {
 			s.Equal(tc.expectedError, err)
 			s.EqualValues(tc.expectedOutput, res)

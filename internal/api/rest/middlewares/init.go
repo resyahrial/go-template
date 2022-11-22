@@ -1,4 +1,4 @@
-package middleware
+package middlewares
 
 import (
 	"github.com/resyahrial/go-template/config"
@@ -8,14 +8,14 @@ import (
 type Middleware struct {
 }
 
-type MiddlewareOpts struct {
+type Opts struct {
 	Db  *gorm.DB
 	Cfg config.Config
 }
 
-type MiddlewareOptionFn func(*Middleware, MiddlewareOpts)
+type MiddlewareOptionFn func(*Middleware, Opts)
 
-func NewMiddleware(mOpts MiddlewareOpts, opts ...MiddlewareOptionFn) *Middleware {
+func New(mOpts Opts, opts ...MiddlewareOptionFn) *Middleware {
 	m := &Middleware{}
 	for _, opt := range opts {
 		opt(m, mOpts)

@@ -8,7 +8,7 @@ import (
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/resyahrial/go-template/internal/entities"
-	repo "github.com/resyahrial/go-template/internal/repositories/pg/repo/user"
+	repo "github.com/resyahrial/go-template/internal/repositories/postgresql/repo/user"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

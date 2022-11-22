@@ -1,4 +1,4 @@
-package pg
+package postgresql
 
 import (
 	"log"
@@ -47,6 +47,6 @@ func InitDatabase(cfg config.Config) *gorm.DB {
 	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
 	sqlDB.SetConnMaxLifetime(time.Duration(cfg.Database.ConnMaxLifetime) * time.Hour)
 
-	log.Println("failed to initiate database object")
+	log.Println("success to initiate database object")
 	return DbInstance
 }

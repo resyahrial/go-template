@@ -4,14 +4,12 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/resyahrial/go-template/config"
-	route "github.com/resyahrial/go-template/internal/api/routes"
-	"github.com/resyahrial/go-template/internal/api/server"
-	"github.com/resyahrial/go-template/internal/repositories/pg"
+	"github.com/resyahrial/go-template/internal/api/rest/server"
+	"github.com/resyahrial/go-template/internal/repositories/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
 )
 
@@ -38,15 +36,10 @@ func main() {
 	flag.Parse()
 	config.InitConfig(appFlag.Environment)
 
-	_ = pg.InitDatabase(config.GlobalConfig)
-
-	serverEngine := server.InitGinEngine(config.GlobalConfig)
-	if serverEngine == nil {
-		log.Fatal("server failed to initialized")
-	}
+	_ = postgresql.InitDatabase(config.GlobalConfig)
 
 	graceful.RunHttpServer(context.Background(), &http.Server{
 		Addr:    fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
-		Handler: route.InitRoutes(serverEngine, pg.DbInstance),
+		Handler: server.InitServer(postgresql.DbInstance, config.GlobalConfig),
 	}, 10*time.Second)
 }
