@@ -15,7 +15,9 @@
 # vendor/
 
 files/etc/app_config/*.yml
-!files/etc/app_config/config.example.yml
+!files/etc/app_config/config.dev.yml
 
-files/etc/env/env.*.sh
-!files/etc/env/env.example.sh
+files/etc/env/env.*
+!files/etc/env/env.example
+
+db/*.sql
