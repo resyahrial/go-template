@@ -3,7 +3,7 @@ package user_test
 import (
 	"testing"
 
-	user "github.com/resyahrial/go-template/internal/api/rest/user"
+	"github.com/resyahrial/go-template/internal/api/rest/user"
 	"github.com/resyahrial/go-template/internal/entities"
 	"github.com/resyahrial/go-template/pkg/exception"
 	"github.com/stretchr/testify/suite"
