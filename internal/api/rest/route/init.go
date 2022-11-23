@@ -4,8 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mitchellh/mapstructure"
 	"github.com/resyahrial/go-template/config"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
+	"github.com/resyahrial/go-template/internal/factory"
+	"github.com/resyahrial/go-template/pkg/validator"
 	"gorm.io/gorm"
 )
 
@@ -21,9 +26,24 @@ func InitRoutes(e *gin.Engine, opt RouteOpt) {
 		})
 	})
 
+	reqConverter := request.NewConverter(
+		&request.ValidatorImpl{
+			Fn: validator.Validate,
+		},
+		&request.DecoderImpl{
+			Fn: mapstructure.Decode,
+		},
+	)
+
+	resConverter := response.NewConverter(
+		&response.DecoderImpl{
+			Fn: mapstructure.Decode,
+		},
+	)
+
 	initV1Route(e, handler.NewHandler(
-		nil,
-		nil,
-		nil,
+		reqConverter,
+		resConverter,
+		factory.InitUserUsecase(opt.Db),
 	))
 }

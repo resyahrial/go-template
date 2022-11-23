@@ -23,5 +23,8 @@ func (h *Handler) CreateUser(c Context) {
 		return
 	}
 
-	c.Set(middlewares.SuccessKey, user)
+	if err = h.resConverter.SetCreateUserResponse(c, user); err != nil {
+		c.Set(middlewares.FailureKey, err)
+		return
+	}
 }

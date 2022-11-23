@@ -15,7 +15,7 @@ type RequestConverter interface {
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go ResponseConverter
 type ResponseConverter interface {
-	SetCreateUserResponse(c response.Context, user *entities.User)
+	SetCreateUserResponse(c response.Context, user *entities.User) (err error)
 }
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go Context
