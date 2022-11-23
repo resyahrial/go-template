@@ -7,5 +7,5 @@ import (
 
 func initV1Route(e *gin.Engine, h *handler.Handler) {
 	r := e.Group("v1")
-	r.POST("", func(ctx *gin.Context) { h.CreateUser(ctx) })
+	r.POST("", WrapHandler(h.CreateUser))
 }
