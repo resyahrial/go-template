@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/resyahrial/go-template/config"
-	handler "github.com/resyahrial/go-template/internal/api/rest/v1/handlers"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"gorm.io/gorm"
 )
 
@@ -21,5 +21,8 @@ func InitRoutes(e *gin.Engine, opt RouteOpt) {
 		})
 	})
 
-	initV1Route(e, handler.NewHandler(opt.Db, opt.Cfg))
+	initV1Route(e, handler.NewHandler(
+		nil,
+		nil,
+	))
 }
