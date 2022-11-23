@@ -9,46 +9,10 @@ import (
 	time "time"
 
 	gomock "github.com/golang/mock/gomock"
-	handler "github.com/resyahrial/go-template/internal/api/rest/v1/handler"
+	request "github.com/resyahrial/go-template/internal/api/rest/v1/request"
+	response "github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	entities "github.com/resyahrial/go-template/internal/entities"
 )
-
-// MockRequestContext is a mock of RequestContext interface.
-type MockRequestContext struct {
-	ctrl     *gomock.Controller
-	recorder *MockRequestContextMockRecorder
-}
-
-// MockRequestContextMockRecorder is the mock recorder for MockRequestContext.
-type MockRequestContextMockRecorder struct {
-	mock *MockRequestContext
-}
-
-// NewMockRequestContext creates a new mock instance.
-func NewMockRequestContext(ctrl *gomock.Controller) *MockRequestContext {
-	mock := &MockRequestContext{ctrl: ctrl}
-	mock.recorder = &MockRequestContextMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockRequestContext) EXPECT() *MockRequestContextMockRecorder {
-	return m.recorder
-}
-
-// BindJSON mocks base method.
-func (m *MockRequestContext) BindJSON(obj any) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "BindJSON", obj)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// BindJSON indicates an expected call of BindJSON.
-func (mr *MockRequestContextMockRecorder) BindJSON(obj interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BindJSON", reflect.TypeOf((*MockRequestContext)(nil).BindJSON), obj)
-}
 
 // MockRequestConverter is a mock of RequestConverter interface.
 type MockRequestConverter struct {
@@ -74,7 +38,7 @@ func (m *MockRequestConverter) EXPECT() *MockRequestConverterMockRecorder {
 }
 
 // GetCreateUserRequest mocks base method.
-func (m *MockRequestConverter) GetCreateUserRequest(c handler.RequestContext) (*entities.User, error) {
+func (m *MockRequestConverter) GetCreateUserRequest(c request.Context) (*entities.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCreateUserRequest", c)
 	ret0, _ := ret[0].(*entities.User)
@@ -86,41 +50,6 @@ func (m *MockRequestConverter) GetCreateUserRequest(c handler.RequestContext) (*
 func (mr *MockRequestConverterMockRecorder) GetCreateUserRequest(c interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCreateUserRequest", reflect.TypeOf((*MockRequestConverter)(nil).GetCreateUserRequest), c)
-}
-
-// MockResponseContext is a mock of ResponseContext interface.
-type MockResponseContext struct {
-	ctrl     *gomock.Controller
-	recorder *MockResponseContextMockRecorder
-}
-
-// MockResponseContextMockRecorder is the mock recorder for MockResponseContext.
-type MockResponseContextMockRecorder struct {
-	mock *MockResponseContext
-}
-
-// NewMockResponseContext creates a new mock instance.
-func NewMockResponseContext(ctrl *gomock.Controller) *MockResponseContext {
-	mock := &MockResponseContext{ctrl: ctrl}
-	mock.recorder = &MockResponseContextMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockResponseContext) EXPECT() *MockResponseContextMockRecorder {
-	return m.recorder
-}
-
-// Set mocks base method.
-func (m *MockResponseContext) Set(key string, obj any) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", key, obj)
-}
-
-// Set indicates an expected call of Set.
-func (mr *MockResponseContextMockRecorder) Set(key, obj interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockResponseContext)(nil).Set), key, obj)
 }
 
 // MockResponseConverter is a mock of ResponseConverter interface.
@@ -147,7 +76,7 @@ func (m *MockResponseConverter) EXPECT() *MockResponseConverterMockRecorder {
 }
 
 // SetCreateUserResponse mocks base method.
-func (m *MockResponseConverter) SetCreateUserResponse(c handler.ResponseContext, user *entities.User) {
+func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entities.User) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "SetCreateUserResponse", c, user)
 }
@@ -158,31 +87,31 @@ func (mr *MockResponseConverterMockRecorder) SetCreateUserResponse(c, user inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCreateUserResponse", reflect.TypeOf((*MockResponseConverter)(nil).SetCreateUserResponse), c, user)
 }
 
-// MockContextHandler is a mock of ContextHandler interface.
-type MockContextHandler struct {
+// MockContext is a mock of Context interface.
+type MockContext struct {
 	ctrl     *gomock.Controller
-	recorder *MockContextHandlerMockRecorder
+	recorder *MockContextMockRecorder
 }
 
-// MockContextHandlerMockRecorder is the mock recorder for MockContextHandler.
-type MockContextHandlerMockRecorder struct {
-	mock *MockContextHandler
+// MockContextMockRecorder is the mock recorder for MockContext.
+type MockContextMockRecorder struct {
+	mock *MockContext
 }
 
-// NewMockContextHandler creates a new mock instance.
-func NewMockContextHandler(ctrl *gomock.Controller) *MockContextHandler {
-	mock := &MockContextHandler{ctrl: ctrl}
-	mock.recorder = &MockContextHandlerMockRecorder{mock}
+// NewMockContext creates a new mock instance.
+func NewMockContext(ctrl *gomock.Controller) *MockContext {
+	mock := &MockContext{ctrl: ctrl}
+	mock.recorder = &MockContextMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockContextHandler) EXPECT() *MockContextHandlerMockRecorder {
+func (m *MockContext) EXPECT() *MockContextMockRecorder {
 	return m.recorder
 }
 
 // BindJSON mocks base method.
-func (m *MockContextHandler) BindJSON(obj any) error {
+func (m *MockContext) BindJSON(obj any) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "BindJSON", obj)
 	ret0, _ := ret[0].(error)
@@ -190,13 +119,13 @@ func (m *MockContextHandler) BindJSON(obj any) error {
 }
 
 // BindJSON indicates an expected call of BindJSON.
-func (mr *MockContextHandlerMockRecorder) BindJSON(obj interface{}) *gomock.Call {
+func (mr *MockContextMockRecorder) BindJSON(obj interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BindJSON", reflect.TypeOf((*MockContextHandler)(nil).BindJSON), obj)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BindJSON", reflect.TypeOf((*MockContext)(nil).BindJSON), obj)
 }
 
 // Deadline mocks base method.
-func (m *MockContextHandler) Deadline() (time.Time, bool) {
+func (m *MockContext) Deadline() (time.Time, bool) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Deadline")
 	ret0, _ := ret[0].(time.Time)
@@ -205,13 +134,13 @@ func (m *MockContextHandler) Deadline() (time.Time, bool) {
 }
 
 // Deadline indicates an expected call of Deadline.
-func (mr *MockContextHandlerMockRecorder) Deadline() *gomock.Call {
+func (mr *MockContextMockRecorder) Deadline() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Deadline", reflect.TypeOf((*MockContextHandler)(nil).Deadline))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Deadline", reflect.TypeOf((*MockContext)(nil).Deadline))
 }
 
 // Done mocks base method.
-func (m *MockContextHandler) Done() <-chan struct{} {
+func (m *MockContext) Done() <-chan struct{} {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Done")
 	ret0, _ := ret[0].(<-chan struct{})
@@ -219,13 +148,13 @@ func (m *MockContextHandler) Done() <-chan struct{} {
 }
 
 // Done indicates an expected call of Done.
-func (mr *MockContextHandlerMockRecorder) Done() *gomock.Call {
+func (mr *MockContextMockRecorder) Done() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Done", reflect.TypeOf((*MockContextHandler)(nil).Done))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Done", reflect.TypeOf((*MockContext)(nil).Done))
 }
 
 // Err mocks base method.
-func (m *MockContextHandler) Err() error {
+func (m *MockContext) Err() error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Err")
 	ret0, _ := ret[0].(error)
@@ -233,25 +162,25 @@ func (m *MockContextHandler) Err() error {
 }
 
 // Err indicates an expected call of Err.
-func (mr *MockContextHandlerMockRecorder) Err() *gomock.Call {
+func (mr *MockContextMockRecorder) Err() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Err", reflect.TypeOf((*MockContextHandler)(nil).Err))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Err", reflect.TypeOf((*MockContext)(nil).Err))
 }
 
 // Set mocks base method.
-func (m *MockContextHandler) Set(key string, obj any) {
+func (m *MockContext) Set(key string, obj any) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "Set", key, obj)
 }
 
 // Set indicates an expected call of Set.
-func (mr *MockContextHandlerMockRecorder) Set(key, obj interface{}) *gomock.Call {
+func (mr *MockContextMockRecorder) Set(key, obj interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContextHandler)(nil).Set), key, obj)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), key, obj)
 }
 
 // Value mocks base method.
-func (m *MockContextHandler) Value(key any) any {
+func (m *MockContext) Value(key any) any {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Value", key)
 	ret0, _ := ret[0].(any)
@@ -259,7 +188,7 @@ func (m *MockContextHandler) Value(key any) any {
 }
 
 // Value indicates an expected call of Value.
-func (mr *MockContextHandlerMockRecorder) Value(key interface{}) *gomock.Call {
+func (mr *MockContextMockRecorder) Value(key interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Value", reflect.TypeOf((*MockContextHandler)(nil).Value), key)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Value", reflect.TypeOf((*MockContext)(nil).Value), key)
 }

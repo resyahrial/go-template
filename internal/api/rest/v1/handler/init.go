@@ -5,16 +5,15 @@ import (
 )
 
 type Handler struct {
-	converter   RequestConverter
-	userUsecase entities.UserUsecase
+	reqConverter RequestConverter
+	resConverter ResponseConverter
+	userUsecase  entities.UserUsecase
 }
 
 func NewHandler(
-	converter RequestConverter,
 	userUsecase entities.UserUsecase,
 ) *Handler {
 	return &Handler{
-		converter,
-		userUsecase,
+		userUsecase: userUsecase,
 	}
 }

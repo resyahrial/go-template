@@ -2,17 +2,12 @@ package response
 
 type ResponseDecoderFn func(in, out interface{}) error
 
-//go:generate mockgen -destination=mocks/mock.go -source=converter.go DecoderAdapter
-type DecoderAdapter interface {
-	Decode(in, out interface{}) error
-}
-
 type Converter struct {
-	decoder DecoderAdapter
+	decoder Decoder
 }
 
 func NewConverter(
-	decoder DecoderAdapter,
+	decoder Decoder,
 ) *Converter {
 	return &Converter{
 		decoder,

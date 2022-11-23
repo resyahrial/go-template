@@ -68,14 +68,14 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 				req    *request.CreateUser
 				entity *entities.User
 			)
-			s.reqCtx.EXPECT().BindJSON(&req).SetArg(0, tc.createUserRequest).Return(tc.mockBindJSONError)
+			s.ctx.EXPECT().BindJSON(&req).SetArg(0, tc.createUserRequest).Return(tc.mockBindJSONError)
 			if tc.mockBindJSONError == nil {
 				s.validator.EXPECT().Validate(tc.createUserRequest).Return(tc.mockValidateResult)
 				if tc.mockValidateResult == nil {
 					s.decoder.EXPECT().Decode(tc.createUserRequest, &entity).SetArg(1, tc.expectedResult).Return(tc.expectedError)
 				}
 			}
-			user, err := s.converter.GetCreateUserRequest(s.reqCtx)
+			user, err := s.converter.GetCreateUserRequest(s.ctx)
 			s.Equal(tc.expectedError, err)
 			s.Equal(tc.expectedResult, user)
 		})

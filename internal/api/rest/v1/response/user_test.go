@@ -47,9 +47,9 @@ func (s *ResponseConverterTestSuite) TestConvertCreateUser() {
 			)
 			s.decoder.EXPECT().Decode(tc.userEntity, &res).SetArg(1, tc.mockDecodeResponse).Return(tc.expectedError)
 			if tc.expectedError == nil {
-				s.resCtx.EXPECT().Set(middleware.SuccessKey, tc.mockDecodeResponse)
+				s.ctx.EXPECT().Set(middleware.SuccessKey, tc.mockDecodeResponse)
 			}
-			err := s.converter.SetCreateUserResponse(s.resCtx, tc.userEntity)
+			err := s.converter.SetCreateUserResponse(s.ctx, tc.userEntity)
 			s.Equal(tc.expectedError, err)
 		})
 	}

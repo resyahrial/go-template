@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	mock_handler "github.com/resyahrial/go-template/internal/api/rest/v1/handler/mocks"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	mock_response "github.com/resyahrial/go-template/internal/api/rest/v1/response/mocks"
 	"github.com/stretchr/testify/suite"
@@ -12,8 +11,8 @@ import (
 
 type ResponseConverterTestSuite struct {
 	suite.Suite
-	resCtx    *mock_handler.MockResponseContext
-	decoder   *mock_response.MockDecoderAdapter
+	ctx       *mock_response.MockContext
+	decoder   *mock_response.MockDecoder
 	converter *response.Converter
 }
 
@@ -23,8 +22,8 @@ func TestResponseConverter(t *testing.T) {
 
 func (s *ResponseConverterTestSuite) SetupTest() {
 	ctrl := gomock.NewController(s.T())
-	s.resCtx = mock_handler.NewMockResponseContext(ctrl)
-	s.decoder = mock_response.NewMockDecoderAdapter(ctrl)
+	s.ctx = mock_response.NewMockContext(ctrl)
+	s.decoder = mock_response.NewMockDecoder(ctrl)
 	s.converter = response.NewConverter(
 		s.decoder,
 	)

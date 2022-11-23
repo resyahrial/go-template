@@ -1,7 +1,6 @@
 package request
 
 import (
-	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/entities"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
@@ -12,12 +11,12 @@ type CreateUser struct {
 	Password string `json:"password"`
 }
 
-func (e *Converter) GetCreateUserRequest(binder handler.RequestContext) (user *entities.User, err error) {
+func (e *Converter) GetCreateUserRequest(ctx Context) (user *entities.User, err error) {
 	var (
 		req *CreateUser
 	)
 
-	if err = binder.BindJSON(&req); err != nil {
+	if err = ctx.BindJSON(&req); err != nil {
 		return
 	}
 

@@ -7,13 +7,13 @@ import (
 	"github.com/resyahrial/go-template/internal/entities"
 )
 
-func (h *Handler) CreateUser(c ContextHandler) {
+func (h *Handler) CreateUser(c Context) {
 	var (
 		err  error
 		user *entities.User
 	)
 
-	if user, err = h.converter.GetCreateUserRequest(c); err != nil {
+	if user, err = h.reqConverter.GetCreateUserRequest(c); err != nil {
 		c.Set(middlewares.FailureKey, err)
 		return
 	}
