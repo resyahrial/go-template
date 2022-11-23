@@ -11,9 +11,13 @@ type Handler struct {
 }
 
 func NewHandler(
+	reqConverter RequestConverter,
+	resConverter ResponseConverter,
 	userUsecase entities.UserUsecase,
 ) *Handler {
 	return &Handler{
-		userUsecase: userUsecase,
+		reqConverter,
+		resConverter,
+		userUsecase,
 	}
 }

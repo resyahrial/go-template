@@ -23,5 +23,7 @@ func InitRoutes(e *gin.Engine, opt RouteOpt) {
 
 	initV1Route(e, handler.NewHandler(
 		nil,
+		nil,
+		nil,
 	))
 }

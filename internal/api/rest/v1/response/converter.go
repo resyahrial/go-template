@@ -13,3 +13,11 @@ func NewConverter(
 		decoder,
 	}
 }
+
+type DecoderImpl struct {
+	Fn ResponseDecoderFn
+}
+
+func (v *DecoderImpl) Decode(in, out interface{}) error {
+	return v.Fn(in, out)
+}

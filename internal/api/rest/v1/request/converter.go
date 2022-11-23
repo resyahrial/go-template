@@ -18,3 +18,19 @@ func NewConverter(
 		decoder,
 	}
 }
+
+type ValidatorImpl struct {
+	Fn RequestValidatorFn
+}
+
+func (v *ValidatorImpl) Validate(data interface{}) map[string][]string {
+	return v.Fn(data)
+}
+
+type DecoderImpl struct {
+	Fn RequestDecoderFn
+}
+
+func (v *DecoderImpl) Decode(in, out interface{}) error {
+	return v.Fn(in, out)
+}
