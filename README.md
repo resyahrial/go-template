@@ -129,6 +129,7 @@ As such, our core code will be in the form of:
 |--- internal
 |    |--- api
 |    |    |--- rest
+|    |    |    |--- ...package needed
 |    |    |    |--- module A
 |    |    |    |--- module B
 |    |    |--- gql
