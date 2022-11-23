@@ -12,7 +12,7 @@ type CreateUser struct {
 	Password string `json:"password"`
 }
 
-func (e *Converter) GetCreateUserRequest(binder handler.JsonRequestBinderAdapater) (user *entities.User, err error) {
+func (e *Converter) GetCreateUserRequest(binder handler.RequestContext) (user *entities.User, err error) {
 	var (
 		req *CreateUser
 	)

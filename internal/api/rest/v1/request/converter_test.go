@@ -12,7 +12,7 @@ import (
 
 type RequestConverterTestSuite struct {
 	suite.Suite
-	binder    *mock_handler.MockJsonRequestBinderAdapater
+	reqCtx    *mock_handler.MockRequestContext
 	validator *mock_request.MockValidatorAdapter
 	decoder   *mock_request.MockDecoderAdapter
 	converter *request.Converter
@@ -24,7 +24,7 @@ func TestRequestConverter(t *testing.T) {
 
 func (s *RequestConverterTestSuite) SetupTest() {
 	ctrl := gomock.NewController(s.T())
-	s.binder = mock_handler.NewMockJsonRequestBinderAdapater(ctrl)
+	s.reqCtx = mock_handler.NewMockRequestContext(ctrl)
 	s.validator = mock_request.NewMockValidatorAdapter(ctrl)
 	s.decoder = mock_request.NewMockDecoderAdapter(ctrl)
 	s.converter = request.NewConverter(

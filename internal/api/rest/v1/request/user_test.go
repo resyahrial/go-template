@@ -8,7 +8,7 @@ import (
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
-func (s *RequestConverterTestSuite) TestConvertCreateUserRequest() {
+func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 	testCases := []struct {
 		name               string
 		createUserRequest  *request.CreateUser
@@ -68,14 +68,14 @@ func (s *RequestConverterTestSuite) TestConvertCreateUserRequest() {
 				req    *request.CreateUser
 				entity *entities.User
 			)
-			s.binder.EXPECT().BindJSON(&req).SetArg(0, tc.createUserRequest).Return(tc.mockBindJSONError)
+			s.reqCtx.EXPECT().BindJSON(&req).SetArg(0, tc.createUserRequest).Return(tc.mockBindJSONError)
 			if tc.mockBindJSONError == nil {
 				s.validator.EXPECT().Validate(tc.createUserRequest).Return(tc.mockValidateResult)
 				if tc.mockValidateResult == nil {
 					s.decoder.EXPECT().Decode(tc.createUserRequest, &entity).SetArg(1, tc.expectedResult).Return(tc.expectedError)
 				}
 			}
-			user, err := s.converter.GetCreateUserRequest(s.binder)
+			user, err := s.converter.GetCreateUserRequest(s.reqCtx)
 			s.Equal(tc.expectedError, err)
 			s.Equal(tc.expectedResult, user)
 		})

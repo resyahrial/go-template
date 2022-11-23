@@ -7,7 +7,7 @@ import (
 	"github.com/resyahrial/go-template/internal/entities"
 )
 
-func (h *Handler) CreateUser(c ContextHandlerAdapter) {
+func (h *Handler) CreateUser(c ContextHandler) {
 	var (
 		err  error
 		user *entities.User
