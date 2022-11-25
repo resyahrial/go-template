@@ -30,7 +30,7 @@ func InitServer(db *gorm.DB, cfg config.Config) *gin.Engine {
 
 	engine.Use(
 		func(ctx *gin.Context) {
-			customMiddleware.ResponseWrapper(ctx)
+			customMiddleware.ResponseHandler(ctx)
 		},
 	)
 

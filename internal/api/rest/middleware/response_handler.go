@@ -33,7 +33,7 @@ type Failure struct {
 	ErrorMsg interface{} `json:"error"`
 }
 
-func (m *Middleware) ResponseWrapper(ctx Context) {
+func (m *Middleware) ResponseHandler(ctx Context) {
 	ctx.Next()
 
 	if val, ok := ctx.Get(FailureKey); ok {
