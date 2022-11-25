@@ -5,20 +5,20 @@ import (
 
 	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 func (s *ResponseConverterTestSuite) TestConvertCreateUser() {
 	testCases := []struct {
 		name               string
-		userEntity         *entities.User
+		userEntity         *entity.User
 		mockDecodeError    error
 		mockDecodeResponse *response.CreateUser
 		expectedError      error
 	}{
 		{
 			name: "should success get create user response",
-			userEntity: &entities.User{
+			userEntity: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",
@@ -30,7 +30,7 @@ func (s *ResponseConverterTestSuite) TestConvertCreateUser() {
 		},
 		{
 			name: "should return error when occure error on decode request",
-			userEntity: &entities.User{
+			userEntity: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",

@@ -6,7 +6,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	mock_handler "github.com/resyahrial/go-template/internal/api/rest/v1/handler/mocks"
-	mock_entities "github.com/resyahrial/go-template/internal/entities/mocks"
+	mock_entity "github.com/resyahrial/go-template/internal/entity/mocks"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -15,7 +15,7 @@ type HandlerTestSuite struct {
 	ctx          *mock_handler.MockContext
 	reqConverter *mock_handler.MockRequestConverter
 	resConverter *mock_handler.MockResponseConverter
-	userUsecase  *mock_entities.MockUserUsecase
+	userUsecase  *mock_entity.MockUserUsecase
 	h            *handler.Handler
 }
 
@@ -28,7 +28,7 @@ func (s *HandlerTestSuite) SetupTest() {
 	s.ctx = mock_handler.NewMockContext(ctrl)
 	s.reqConverter = mock_handler.NewMockRequestConverter(ctrl)
 	s.resConverter = mock_handler.NewMockResponseConverter(ctrl)
-	s.userUsecase = mock_entities.NewMockUserUsecase(ctrl)
+	s.userUsecase = mock_entity.NewMockUserUsecase(ctrl)
 	s.h = handler.NewHandler(
 		s.reqConverter,
 		s.resConverter,

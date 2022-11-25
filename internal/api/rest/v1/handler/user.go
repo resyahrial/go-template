@@ -1,12 +1,12 @@
 package handler
 
 import (
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 func (h *Handler) CreateUser(c Context) (err error) {
 	var (
-		user *entities.User
+		user *entity.User
 	)
 
 	if user, err = h.reqConverter.GetCreateUserRequest(c); err != nil {

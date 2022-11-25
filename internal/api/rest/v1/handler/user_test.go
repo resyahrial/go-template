@@ -3,13 +3,13 @@ package handler_test
 import (
 	"errors"
 
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 func (s *HandlerTestSuite) TestCreateUser() {
 	testCases := []struct {
 		name                  string
-		mockUserEntity        *entities.User
+		mockUserEntity        *entity.User
 		mockReqConverterError error
 		mockUsecaseError      error
 		mockResConverterError error
@@ -17,7 +17,7 @@ func (s *HandlerTestSuite) TestCreateUser() {
 	}{
 		{
 			name: "should success create user",
-			mockUserEntity: &entities.User{
+			mockUserEntity: &entity.User{
 				Id:       "id",
 				Name:     "user",
 				Email:    "user@mail.com",
@@ -26,7 +26,7 @@ func (s *HandlerTestSuite) TestCreateUser() {
 		},
 		{
 			name: "should return error when occur error when convert response",
-			mockUserEntity: &entities.User{
+			mockUserEntity: &entity.User{
 				Id:       "id",
 				Name:     "user",
 				Email:    "user@mail.com",
@@ -37,7 +37,7 @@ func (s *HandlerTestSuite) TestCreateUser() {
 		},
 		{
 			name: "should return error when occur error when create user",
-			mockUserEntity: &entities.User{
+			mockUserEntity: &entity.User{
 				Id:       "id",
 				Name:     "user",
 				Email:    "user@mail.com",

@@ -5,17 +5,17 @@ import (
 
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go RequestConverter
 type RequestConverter interface {
-	GetCreateUserRequest(c request.Context) (user *entities.User, err error)
+	GetCreateUserRequest(c request.Context) (user *entity.User, err error)
 }
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go ResponseConverter
 type ResponseConverter interface {
-	SetCreateUserResponse(c response.Context, user *entities.User) (err error)
+	SetCreateUserResponse(c response.Context, user *entity.User) (err error)
 }
 
 //go:generate mockgen -destination=mocks/mock.go -source=adapter.go Context

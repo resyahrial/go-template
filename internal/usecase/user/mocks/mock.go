@@ -9,7 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	entities "github.com/resyahrial/go-template/internal/entities"
+	entity "github.com/resyahrial/go-template/internal/entity"
 )
 
 // MockUserRepo is a mock of UserRepo interface.
@@ -36,10 +36,10 @@ func (m *MockUserRepo) EXPECT() *MockUserRepoMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockUserRepo) Create(ctx context.Context, user *entities.User) (*entities.User, error) {
+func (m *MockUserRepo) Create(ctx context.Context, user *entity.User) (*entity.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", ctx, user)
-	ret0, _ := ret[0].(*entities.User)
+	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	usecase "github.com/resyahrial/go-template/internal/usecase/user"
 	adapter_mock "github.com/resyahrial/go-template/internal/usecase/user/mocks"
 	"github.com/segmentio/ksuid"
@@ -16,7 +16,7 @@ import (
 type CreateUserUsecaseTestSuite struct {
 	suite.Suite
 	userRepo *adapter_mock.MockUserRepo
-	ucase    entities.UserUsecase
+	ucase    entity.UserUsecase
 }
 
 func TestCreateUserUsecase(t *testing.T) {
@@ -33,7 +33,7 @@ func (s *CreateUserUsecaseTestSuite) SetupTest() {
 
 func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 	userId := ksuid.New().String()
-	input := &entities.User{
+	input := &entity.User{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",
@@ -41,20 +41,20 @@ func (s *CreateUserUsecaseTestSuite) TestCreateUser() {
 
 	testCases := []struct {
 		name                 string
-		resultMockCreateUser *entities.User
+		resultMockCreateUser *entity.User
 		errorMockCreateUser  error
-		expectedOutput       *entities.User
+		expectedOutput       *entity.User
 		expectedError        error
 	}{
 		{
 			name: "should create user",
-			resultMockCreateUser: &entities.User{
+			resultMockCreateUser: &entity.User{
 				Id:       userId,
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "password",
 			},
-			expectedOutput: &entities.User{
+			expectedOutput: &entity.User{
 				Id:       userId,
 				Name:     "user",
 				Email:    "user@mail.com",

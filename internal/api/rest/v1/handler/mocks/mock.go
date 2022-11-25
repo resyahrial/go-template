@@ -11,7 +11,7 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	request "github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	response "github.com/resyahrial/go-template/internal/api/rest/v1/response"
-	entities "github.com/resyahrial/go-template/internal/entities"
+	entity "github.com/resyahrial/go-template/internal/entity"
 )
 
 // MockRequestConverter is a mock of RequestConverter interface.
@@ -38,10 +38,10 @@ func (m *MockRequestConverter) EXPECT() *MockRequestConverterMockRecorder {
 }
 
 // GetCreateUserRequest mocks base method.
-func (m *MockRequestConverter) GetCreateUserRequest(c request.Context) (*entities.User, error) {
+func (m *MockRequestConverter) GetCreateUserRequest(c request.Context) (*entity.User, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetCreateUserRequest", c)
-	ret0, _ := ret[0].(*entities.User)
+	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -76,7 +76,7 @@ func (m *MockResponseConverter) EXPECT() *MockResponseConverterMockRecorder {
 }
 
 // SetCreateUserResponse mocks base method.
-func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entities.User) error {
+func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entity.User) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SetCreateUserResponse", c, user)
 	ret0, _ := ret[0].(error)

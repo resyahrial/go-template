@@ -3,8 +3,8 @@ package repo
 import (
 	"context"
 
-	"github.com/resyahrial/go-template/internal/entities"
-	"github.com/resyahrial/go-template/internal/repositories/postgresql/models"
+	"github.com/resyahrial/go-template/internal/entity"
+	"github.com/resyahrial/go-template/internal/repo/postgresql/model"
 	"github.com/segmentio/ksuid"
 	"gorm.io/gorm"
 )
@@ -21,12 +21,12 @@ func NewUserRepo(
 	}
 }
 
-func (u *UserRepoImpl) Create(ctx context.Context, user *entities.User) (res *entities.User, err error) {
+func (u *UserRepoImpl) Create(ctx context.Context, user *entity.User) (res *entity.User, err error) {
 	var (
-		userModel *models.User
+		userModel *model.User
 	)
 
-	if userModel, err = models.NewUserModel(user); err != nil {
+	if userModel, err = model.NewUserModel(user); err != nil {
 		return
 	}
 

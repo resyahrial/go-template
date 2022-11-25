@@ -1,22 +1,22 @@
-package models_test
+package model_test
 
 import (
 	"testing"
 
-	"github.com/resyahrial/go-template/internal/entities"
-	"github.com/resyahrial/go-template/internal/repositories/postgresql/models"
+	"github.com/resyahrial/go-template/internal/entity"
+	"github.com/resyahrial/go-template/internal/repo/postgresql/model"
 	"github.com/segmentio/ksuid"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewUserModel(t *testing.T) {
-	userEntity := &entities.User{
+	userEntity := &entity.User{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",
 	}
 
-	user, err := models.NewUserModel(userEntity)
+	user, err := model.NewUserModel(userEntity)
 	assert.Nil(t, err)
 	assert.NotNil(t, user)
 	assert.Equal(t, userEntity.Name, user.Name)
@@ -25,8 +25,8 @@ func TestNewUserModel(t *testing.T) {
 }
 
 func TestConvertToEntityUser(t *testing.T) {
-	user := &models.User{
-		CommonField: models.CommonField{
+	user := &model.User{
+		CommonField: model.CommonField{
 			Id: ksuid.New().String(),
 		},
 		Name:     "user",

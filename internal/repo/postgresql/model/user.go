@@ -1,8 +1,8 @@
-package models
+package model
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 type User struct {
@@ -12,14 +12,14 @@ type User struct {
 	Password string
 }
 
-func NewUserModel(userEntity *entities.User) (user *User, err error) {
+func NewUserModel(userEntity *entity.User) (user *User, err error) {
 	if err = mapstructure.Decode(userEntity, &user); err != nil {
 		return
 	}
 	return
 }
 
-func (u *User) ConvertToEntity() (userEntity *entities.User, err error) {
+func (u *User) ConvertToEntity() (userEntity *entity.User, err error) {
 	if err = mapstructure.Decode(u, &userEntity); err != nil {
 		return
 	}
