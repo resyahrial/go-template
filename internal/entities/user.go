@@ -15,6 +15,7 @@ type User struct {
 	Password string
 }
 
+//go:generate mockgen -destination=mocks/user_mock.go -source=user.go UserUsecase
 type UserUsecase interface {
 	CreateUser(ctx context.Context, input *User) (user *User, err error)
 }

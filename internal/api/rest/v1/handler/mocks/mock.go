@@ -76,9 +76,11 @@ func (m *MockResponseConverter) EXPECT() *MockResponseConverterMockRecorder {
 }
 
 // SetCreateUserResponse mocks base method.
-func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entities.User) {
+func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entities.User) error {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetCreateUserResponse", c, user)
+	ret := m.ctrl.Call(m, "SetCreateUserResponse", c, user)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // SetCreateUserResponse indicates an expected call of SetCreateUserResponse.
