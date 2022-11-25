@@ -9,7 +9,7 @@ import (
 
 	"github.com/resyahrial/go-template/config"
 	"github.com/resyahrial/go-template/internal/api/rest/server"
-	"github.com/resyahrial/go-template/internal/repositories/postgresql"
+	"github.com/resyahrial/go-template/internal/repo/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
 )
 

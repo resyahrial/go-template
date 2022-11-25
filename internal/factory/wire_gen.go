@@ -9,7 +9,7 @@ package factory
 import (
 	"github.com/google/wire"
 	"github.com/resyahrial/go-template/internal/entity"
-	"github.com/resyahrial/go-template/internal/repositories/postgresql/repo/user"
+	"github.com/resyahrial/go-template/internal/repo/postgresql/repo/user"
 	"github.com/resyahrial/go-template/internal/usecase/user"
 	"gorm.io/gorm"
 )
