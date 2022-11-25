@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
@@ -11,7 +11,7 @@ type CreateUser struct {
 	Password string `json:"password"`
 }
 
-func (e *Converter) GetCreateUserRequest(ctx Context) (user *entities.User, err error) {
+func (e *Converter) GetCreateUserRequest(ctx Context) (user *entity.User, err error) {
 	var (
 		req *CreateUser
 	)
@@ -21,7 +21,7 @@ func (e *Converter) GetCreateUserRequest(ctx Context) (user *entities.User, err 
 	}
 
 	if mapErr := e.validator.Validate(req); len(mapErr) > 0 {
-		err = exception.NewBadRequestException().SetModule(entities.UserModule).SetCollectionMessage(mapErr)
+		err = exception.NewBadRequestException().SetModule(entity.UserModule).SetCollectionMessage(mapErr)
 		return
 	}
 

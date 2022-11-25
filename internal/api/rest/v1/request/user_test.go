@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
@@ -15,7 +15,7 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 		mockBindJSONError  error
 		mockValidateResult map[string][]string
 		mockDecodeError    error
-		expectedResult     *entities.User
+		expectedResult     *entity.User
 		expectedError      error
 	}{
 		{
@@ -25,7 +25,7 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 				Email:    "user@mail.com",
 				Password: "anypassword",
 			},
-			expectedResult: &entities.User{
+			expectedResult: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",
@@ -51,7 +51,7 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 			mockValidateResult: map[string][]string{
 				"email": {"invalid email"},
 			},
-			expectedError: exception.NewBadRequestException().SetModule(entities.UserModule).SetCollectionMessage(map[string][]string{
+			expectedError: exception.NewBadRequestException().SetModule(entity.UserModule).SetCollectionMessage(map[string][]string{
 				"email": {"invalid email"},
 			}),
 		},
@@ -66,7 +66,7 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 		s.Run(tc.name, func() {
 			var (
 				req    *request.CreateUser
-				entity *entities.User
+				entity *entity.User
 			)
 			s.ctx.EXPECT().BindJSON(&req).SetArg(0, tc.createUserRequest).Return(tc.mockBindJSONError)
 			if tc.mockBindJSONError == nil {

@@ -8,7 +8,7 @@ package factory
 
 import (
 	"github.com/google/wire"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/internal/repositories/postgresql/repo/user"
 	"github.com/resyahrial/go-template/internal/usecase/user"
 	"gorm.io/gorm"
@@ -16,7 +16,7 @@ import (
 
 // Injectors from injector.go:
 
-func InitUserUsecase(db *gorm.DB) entities.UserUsecase {
+func InitUserUsecase(db *gorm.DB) entity.UserUsecase {
 	userRepoImpl := repo.NewUserRepo(db)
 	userUsecase := usecase.NewUserUsecase(userRepoImpl)
 	return userUsecase

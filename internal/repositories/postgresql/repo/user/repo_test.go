@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	repo "github.com/resyahrial/go-template/internal/repositories/postgresql/repo/user"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
@@ -50,19 +50,19 @@ func (s *UserRepoTestSuite) SetupTest() {
 func (s *UserRepoTestSuite) TestCreateUser() {
 	testCases := []struct {
 		name                 string
-		input                *entities.User
+		input                *entity.User
 		mockErrorPersistUser error
 		expectedError        error
-		expectedOutput       *entities.User
+		expectedOutput       *entity.User
 	}{
 		{
 			name: "should create user",
-			input: &entities.User{
+			input: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",
 			},
-			expectedOutput: &entities.User{
+			expectedOutput: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",
@@ -70,7 +70,7 @@ func (s *UserRepoTestSuite) TestCreateUser() {
 		},
 		{
 			name: "should not create user when occur error when persist user",
-			input: &entities.User{
+			input: &entity.User{
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",

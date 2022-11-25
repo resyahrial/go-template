@@ -139,7 +139,7 @@ As such, our core code will be in the form of:
 |    |    |    |--- module A
 |    |    |    |--- module B
 |    |
-|    |--- entities
+|    |--- entity
 |    |    |--- module A
 |    |    |--- module B
 |    |
@@ -158,7 +158,7 @@ As such, our core code will be in the form of:
 
 Here are the details on what each component does:
 
-- **API/Handler**: Presenter layer which does conversion of data structure from entities from and to a well-defined format of choosing like gRPC, HTTP, or GQL
+- **API/Handler**: Presenter layer which does conversion of data structure from entity from and to a well-defined format of choosing like gRPC, HTTP, or GQL
 - **Entity**: Business object which has its own data structure and methods. Even though it can be the same as DB models but it does not necessarily have to be the same
 - **Repository**: Adapter for querying or manipulating data in the data layer. Change business entity into a data layer model and vice versa. Data layer to be accessed can include: in-memory, RDBMS, NoSQL, File System, External dependency to other service (internal or 3rd party)
 - **Usecase**: Where business logic lives, this layer orchestrated entity and repository to achieve application specific needs

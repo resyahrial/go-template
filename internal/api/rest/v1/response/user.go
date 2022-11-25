@@ -2,7 +2,7 @@ package response
 
 import (
 	"github.com/resyahrial/go-template/internal/api/rest/middleware"
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 )
 
 type CreateUser struct {
@@ -10,7 +10,7 @@ type CreateUser struct {
 	Email string
 }
 
-func (e *Converter) SetCreateUserResponse(ctx Context, user *entities.User) (err error) {
+func (e *Converter) SetCreateUserResponse(ctx Context, user *entity.User) (err error) {
 	var (
 		res *CreateUser
 	)

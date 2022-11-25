@@ -3,14 +3,14 @@ package models_test
 import (
 	"testing"
 
-	"github.com/resyahrial/go-template/internal/entities"
+	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/internal/repositories/postgresql/models"
 	"github.com/segmentio/ksuid"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewUserModel(t *testing.T) {
-	userEntity := &entities.User{
+	userEntity := &entity.User{
 		Name:     "user",
 		Email:    "user@mail.com",
 		Password: "anypassword",

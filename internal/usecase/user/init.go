@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/resyahrial/go-template/internal/entities"
+import "github.com/resyahrial/go-template/internal/entity"
 
 type UserUsecaseImpl struct {
 	UserRepo
@@ -8,7 +8,7 @@ type UserUsecaseImpl struct {
 
 func NewUserUsecase(
 	userRepo UserRepo,
-) entities.UserUsecase {
+) entity.UserUsecase {
 	return &UserUsecaseImpl{
 		UserRepo: userRepo,
 	}
