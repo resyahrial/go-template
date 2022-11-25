@@ -3,38 +3,49 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
-type success struct {
+const (
+	SuccessKey   = "SuccessKey"
+	FailureKey   = "FailureKey"
+	PaginatedKey = "PaginatedKey"
+)
+
+type PaginatedResultValue struct {
+	Page  int
+	Limit int
+	Count int64
+}
+
+type Success struct {
 	Data     interface{} `json:"data"`
 	PageInfo interface{} `json:"pageInfo,omitempty"`
 }
 
-type pageInfo struct {
+type PageInfo struct {
 	CurrentPage int   `json:"currentPage,omitempty"`
 	TotalPage   int   `json:"totalPage,omitempty"`
 	Count       int64 `json:"count,omitempty"`
 }
 
-type failure struct {
+type Failure struct {
 	ErrorMsg interface{} `json:"error"`
 }
 
 func (m *Middleware) ResponseWrapper(ctx Context) {
 	ctx.Next()
 
-	if val, ok := ctx.Get(response.FailureKey); ok {
+	if val, ok := ctx.Get(FailureKey); ok {
 		if err, ok := val.(error); ok {
 			handleError(ctx, err)
 			return
 		}
 	}
 
-	if data, ok := ctx.Get(response.SuccessKey); ok {
-		if paginatedData, ok := ctx.Get(response.PaginatedKey); ok {
-			if parsedPaginatedData, ok := paginatedData.(response.PaginatedResultValue); ok {
+	if data, ok := ctx.Get(SuccessKey); ok {
+		if paginatedData, ok := ctx.Get(PaginatedKey); ok {
+			if parsedPaginatedData, ok := paginatedData.(PaginatedResultValue); ok {
 				handleSuccessPaginated(ctx, data, parsedPaginatedData)
 			}
 		} else {
@@ -61,18 +72,18 @@ func handleError(ctx Context, err error) {
 		}
 	}
 
-	ctx.AbortWithStatusJSON(code, &failure{
+	ctx.JSON(code, &Failure{
 		ErrorMsg: message,
 	})
 }
 
 func handleSuccess(ctx Context, data interface{}) {
-	ctx.JSON(http.StatusOK, &success{
+	ctx.JSON(http.StatusOK, &Success{
 		Data: data,
 	})
 }
 
-func handleSuccessPaginated(ctx Context, data interface{}, paginatedResultValue response.PaginatedResultValue) {
+func handleSuccessPaginated(ctx Context, data interface{}, paginatedResultValue PaginatedResultValue) {
 	totalPage := 1
 	if paginatedResultValue.Limit < int(paginatedResultValue.Count) {
 		addtional := int(paginatedResultValue.Count) / paginatedResultValue.Limit
@@ -81,9 +92,9 @@ func handleSuccessPaginated(ctx Context, data interface{}, paginatedResultValue 
 		}
 		totalPage += addtional
 	}
-	ctx.JSON(http.StatusOK, &success{
+	ctx.JSON(http.StatusOK, &Success{
 		Data: data,
-		PageInfo: pageInfo{
+		PageInfo: PageInfo{
 			CurrentPage: paginatedResultValue.Page + 1,
 			TotalPage:   totalPage,
 			Count:       paginatedResultValue.Count,

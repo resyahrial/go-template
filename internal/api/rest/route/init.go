@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
 	"github.com/resyahrial/go-template/config"
+	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
@@ -53,7 +54,7 @@ type HandlerFn func(handler.Context) error
 func WrapHandler(fn HandlerFn) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if err := fn(ctx); err != nil {
-			ctx.Set(response.FailureKey, err)
+			ctx.Set(middleware.FailureKey, err)
 		}
 	}
 }
