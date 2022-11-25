@@ -1,7 +1,6 @@
 package response
 
 import (
-	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/entities"
 )
 
@@ -19,6 +18,6 @@ func (e *Converter) SetCreateUserResponse(ctx Context, user *entities.User) (err
 		return
 	}
 
-	ctx.Set(middleware.SuccessKey, res)
+	ctx.Set(SuccessKey, res)
 	return nil
 }

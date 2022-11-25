@@ -3,7 +3,6 @@ package response_test
 import (
 	"errors"
 
-	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"github.com/resyahrial/go-template/internal/entities"
 )
@@ -47,7 +46,7 @@ func (s *ResponseConverterTestSuite) TestConvertCreateUser() {
 			)
 			s.decoder.EXPECT().Decode(tc.userEntity, &res).SetArg(1, tc.mockDecodeResponse).Return(tc.expectedError)
 			if tc.expectedError == nil {
-				s.ctx.EXPECT().Set(middleware.SuccessKey, tc.mockDecodeResponse)
+				s.ctx.EXPECT().Set(response.SuccessKey, tc.mockDecodeResponse)
 			}
 			err := s.converter.SetCreateUserResponse(s.ctx, tc.userEntity)
 			s.Equal(tc.expectedError, err)

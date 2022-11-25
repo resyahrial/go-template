@@ -3,105 +3,76 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
-const (
-	SuccessKey   = "SuccessKey"
-	FailureKey   = "FailureKey"
-	PaginatedKey = "PaginatedKey"
-)
-
-type PaginatedResultValue struct {
-	Page  int
-	Limit int
-	Count int64
-}
-
 type success struct {
-	Success    bool        `json:"success"`
-	StatusCode int         `json:"-"`
-	Data       interface{} `json:"data"`
-	PageInfo   interface{} `json:"page_info,omitempty"`
+	Data     interface{} `json:"data"`
+	PageInfo interface{} `json:"pageInfo,omitempty"`
 }
 
 type pageInfo struct {
-	CurrentPage int   `json:"current_page,omitempty"`
-	TotalPage   int   `json:"total_page,omitempty"`
+	CurrentPage int   `json:"currentPage,omitempty"`
+	TotalPage   int   `json:"totalPage,omitempty"`
 	Count       int64 `json:"count,omitempty"`
 }
 
 type failure struct {
-	Success    bool        `json:"success"`
-	StatusCode int         `json:"-"`
-	ErrorMsg   interface{} `json:"err_msg"`
+	ErrorMsg interface{} `json:"error"`
 }
 
-func (m *Middleware) ResponseWrapper(c *gin.Context) {
-	c.Next()
+func (m *Middleware) ResponseWrapper(ctx Context) {
+	ctx.Next()
 
-	if val, ok := c.Get(FailureKey); ok {
+	if val, ok := ctx.Get(response.FailureKey); ok {
 		if err, ok := val.(error); ok {
-			handleError(c, err)
+			handleError(ctx, err)
 			return
 		}
 	}
 
-	if data, ok := c.Get(SuccessKey); ok {
-		if paginatedData, ok := c.Get(PaginatedKey); ok {
-			if parsedPaginatedData, ok := paginatedData.(PaginatedResultValue); ok {
-				handleSuccessPaginated(c, data, parsedPaginatedData)
+	if data, ok := ctx.Get(response.SuccessKey); ok {
+		if paginatedData, ok := ctx.Get(response.PaginatedKey); ok {
+			if parsedPaginatedData, ok := paginatedData.(response.PaginatedResultValue); ok {
+				handleSuccessPaginated(ctx, data, parsedPaginatedData)
 			}
 		} else {
-			handleSuccess(c, data)
+			handleSuccess(ctx, data)
 		}
 		return
 	}
 }
 
-func handleError(c *gin.Context, err error) {
+func handleError(ctx Context, err error) {
 	var (
-		f *failure
+		code                = http.StatusInternalServerError
+		message interface{} = map[string]interface{}{
+			"message": err.Error(),
+		}
 	)
-	ginErr := c.Error(err)
 
-	switch typeErr := ginErr.Err.(type) {
+	switch typeErr := err.(type) {
 	case *exception.Base:
 		typeErr.LogError()
+		code = typeErr.Code
 		if typeErr.CollectionMessage != nil && len(typeErr.CollectionMessage) > 0 {
-			f = generateFailure(typeErr.Code, typeErr.CollectionMessage)
-		} else {
-			f = generateFailure(typeErr.Code, map[string]interface{}{
-				"message": typeErr.Error(),
-			})
+			message = typeErr.CollectionMessage
 		}
-	default:
-		f = generateFailure(http.StatusInternalServerError, map[string]interface{}{
-			"message": typeErr.Error(),
-		})
 	}
 
-	c.AbortWithStatusJSON(f.StatusCode, f)
+	ctx.AbortWithStatusJSON(code, &failure{
+		ErrorMsg: message,
+	})
 }
 
-func generateFailure(statusCode int, errResponse interface{}) *failure {
-	return &failure{
-		StatusCode: statusCode,
-		ErrorMsg:   errResponse,
-	}
+func handleSuccess(ctx Context, data interface{}) {
+	ctx.JSON(http.StatusOK, &success{
+		Data: data,
+	})
 }
 
-func handleSuccess(c *gin.Context, data interface{}) {
-	s := &success{
-		Success:    true,
-		StatusCode: http.StatusOK,
-		Data:       data,
-	}
-	c.JSON(s.StatusCode, s)
-}
-
-func handleSuccessPaginated(c *gin.Context, data interface{}, paginatedResultValue PaginatedResultValue) {
+func handleSuccessPaginated(ctx Context, data interface{}, paginatedResultValue response.PaginatedResultValue) {
 	totalPage := 1
 	if paginatedResultValue.Limit < int(paginatedResultValue.Count) {
 		addtional := int(paginatedResultValue.Count) / paginatedResultValue.Limit
@@ -110,15 +81,12 @@ func handleSuccessPaginated(c *gin.Context, data interface{}, paginatedResultVal
 		}
 		totalPage += addtional
 	}
-	s := &success{
-		Success:    true,
-		StatusCode: http.StatusOK,
-		Data:       data,
+	ctx.JSON(http.StatusOK, &success{
+		Data: data,
 		PageInfo: pageInfo{
 			CurrentPage: paginatedResultValue.Page + 1,
 			TotalPage:   totalPage,
 			Count:       paginatedResultValue.Count,
 		},
-	}
-	c.JSON(s.StatusCode, s)
+	})
 }

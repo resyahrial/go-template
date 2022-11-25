@@ -8,6 +8,7 @@ import (
 	"github.com/resyahrial/go-template/config"
 	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/route"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"gorm.io/gorm"
 )
 
@@ -28,14 +29,18 @@ func InitServer(db *gorm.DB, cfg config.Config) *gin.Engine {
 
 	engine := gin.Default()
 
-	engine.Use(customMiddleware.ResponseWrapper)
+	engine.Use(
+		func(ctx *gin.Context) {
+			customMiddleware.ResponseWrapper(ctx)
+		},
+	)
 
 	engine.Use(gin.CustomRecovery((func(c *gin.Context, recovered interface{}) {
-		c.Set(middleware.FailureKey, fmt.Errorf("panic : %v", recovered))
+		c.Set(response.FailureKey, fmt.Errorf("panic : %v", recovered))
 	})))
 
 	engine.NoRoute(func(c *gin.Context) {
-		c.Set(middleware.FailureKey, errors.New("route not found"))
+		c.Set(response.FailureKey, errors.New("route not found"))
 	})
 
 	route.InitRoutes(engine, route.RouteOpt{
