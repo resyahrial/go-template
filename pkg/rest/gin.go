@@ -10,7 +10,6 @@ import (
 type GinOption func(*gin.Engine)
 
 func defaultSetup() *gin.Engine {
-	gin.SetMode(gin.DebugMode)
 	engine := gin.Default()
 	engine.Use(gin.CustomRecovery((func(c *gin.Context, recovered interface{}) {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
@@ -33,19 +32,18 @@ func defaultSetup() *gin.Engine {
 	return engine
 }
 
-func InitGinEngine(opts ...GinOption) *gin.Engine {
+func InitGinEngine(mode string, opts ...GinOption) *gin.Engine {
+	if mode != "" {
+		gin.SetMode(mode)
+		if mode == gin.ReleaseMode {
+			gin.DisableConsoleColor()
+		}
+	}
 	engine := defaultSetup()
 	for _, opt := range opts {
 		opt(engine)
 	}
 	return engine
-}
-
-func IsReleaseMode() GinOption {
-	return func(e *gin.Engine) {
-		gin.SetMode(gin.ReleaseMode)
-		gin.DisableConsoleColor()
-	}
 }
 
 func WithCustomMiddlewares(middlewares ...gin.HandlerFunc) GinOption {
