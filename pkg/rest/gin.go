@@ -23,6 +23,13 @@ func defaultSetup() *gin.Engine {
 			"error": "route not found",
 		})
 	})
+
+	engine.GET("/health-check", func(c *gin.Context) {
+		c.JSON(http.StatusOK, map[string]interface{}{
+			"message": "OK",
+		})
+	})
+
 	return engine
 }
 
