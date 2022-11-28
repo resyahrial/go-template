@@ -6,7 +6,7 @@ import (
 	"github.com/resyahrial/go-template/pkg/rest"
 )
 
-func InitServer(isDebugMode bool) *gin.Engine {
+func InitServer(isDebugMode bool, routes []rest.GinRoute) *gin.Engine {
 	var mode string
 	if isDebugMode {
 		mode = gin.ReleaseMode
@@ -14,6 +14,7 @@ func InitServer(isDebugMode bool) *gin.Engine {
 	customMiddleware := middleware.New()
 	return rest.InitGinEngine(
 		mode,
+		rest.WithRoutes(routes...),
 		rest.WithCustomMiddlewares(
 			func(ctx *gin.Context) {
 				customMiddleware.ResponseHandler(ctx)

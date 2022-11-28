@@ -13,6 +13,7 @@ func (s *HandlerTestSuite) TestCreateUser() {
 		mockReqConverterError error
 		mockUsecaseError      error
 		mockResConverterError error
+		expectedResult        interface{}
 		expectedError         error
 	}{
 		{
@@ -22,6 +23,10 @@ func (s *HandlerTestSuite) TestCreateUser() {
 				Name:     "user",
 				Email:    "user@mail.com",
 				Password: "anypassword",
+			},
+			expectedResult: map[string]interface{}{
+				"name":  "user",
+				"email": "user@mail.com",
 			},
 		},
 		{
@@ -59,11 +64,16 @@ func (s *HandlerTestSuite) TestCreateUser() {
 			if tc.mockReqConverterError == nil {
 				s.userUsecase.EXPECT().CreateUser(s.ctx, tc.mockUserEntity).Return(tc.mockUserEntity, tc.mockUsecaseError)
 				if tc.mockUsecaseError == nil {
-					s.resConverter.EXPECT().SetCreateUserResponse(s.ctx, tc.mockUserEntity).Return(tc.mockResConverterError)
+					s.resConverter.EXPECT().GetCreateUserResponse(tc.mockUserEntity).Return(tc.expectedResult, tc.mockResConverterError)
 				}
 			}
-			err := s.h.CreateUser(s.ctx)
+			res, err := s.h.CreateUser(s.ctx)
 			s.Equal(tc.expectedError, err)
+			if tc.expectedError == nil {
+				s.Equal(tc.expectedResult, res)
+			} else {
+				s.Nil(res)
+			}
 		})
 	}
 }

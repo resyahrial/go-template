@@ -10,7 +10,6 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	request "github.com/resyahrial/go-template/internal/api/rest/v1/request"
-	response "github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	entity "github.com/resyahrial/go-template/internal/entity"
 )
 
@@ -75,18 +74,19 @@ func (m *MockResponseConverter) EXPECT() *MockResponseConverterMockRecorder {
 	return m.recorder
 }
 
-// SetCreateUserResponse mocks base method.
-func (m *MockResponseConverter) SetCreateUserResponse(c response.Context, user *entity.User) error {
+// GetCreateUserResponse mocks base method.
+func (m *MockResponseConverter) GetCreateUserResponse(user *entity.User) (interface{}, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SetCreateUserResponse", c, user)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret := m.ctrl.Call(m, "GetCreateUserResponse", user)
+	ret0, _ := ret[0].(interface{})
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
-// SetCreateUserResponse indicates an expected call of SetCreateUserResponse.
-func (mr *MockResponseConverterMockRecorder) SetCreateUserResponse(c, user interface{}) *gomock.Call {
+// GetCreateUserResponse indicates an expected call of GetCreateUserResponse.
+func (mr *MockResponseConverterMockRecorder) GetCreateUserResponse(user interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCreateUserResponse", reflect.TypeOf((*MockResponseConverter)(nil).SetCreateUserResponse), c, user)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCreateUserResponse", reflect.TypeOf((*MockResponseConverter)(nil).GetCreateUserResponse), user)
 }
 
 // MockContext is a mock of Context interface.
@@ -167,18 +167,6 @@ func (m *MockContext) Err() error {
 func (mr *MockContextMockRecorder) Err() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Err", reflect.TypeOf((*MockContext)(nil).Err))
-}
-
-// Set mocks base method.
-func (m *MockContext) Set(key string, obj any) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", key, obj)
-}
-
-// Set indicates an expected call of Set.
-func (mr *MockContextMockRecorder) Set(key, obj interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), key, obj)
 }
 
 // Value mocks base method.

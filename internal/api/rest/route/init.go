@@ -1,13 +1,15 @@
 package route
 
 import (
+	"reflect"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
-	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"github.com/resyahrial/go-template/internal/factory"
+	"github.com/resyahrial/go-template/pkg/rest"
 	"github.com/resyahrial/go-template/pkg/validator"
 	"gorm.io/gorm"
 )
@@ -18,7 +20,15 @@ type option struct {
 
 type Option func(*option)
 
-func InitRoutes(e *gin.Engine, opts ...Option) {
+var (
+	routes []rest.GinRoute
+)
+
+type r struct {
+	h *handler.Handler
+}
+
+func InitRoutes(opts ...Option) []rest.GinRoute {
 	opt := &option{}
 	for _, o := range opts {
 		o(opt)
@@ -39,11 +49,14 @@ func InitRoutes(e *gin.Engine, opts ...Option) {
 		},
 	)
 
-	initV1Route(e, handler.NewHandler(
+	handler := handler.NewHandler(
 		reqConverter,
 		resConverter,
 		factory.InitUserUsecase(opt.Db),
-	))
+	)
+
+	registerRoute(r{}, handler)
+	return routes
 }
 
 func WithGorm(db *gorm.DB) Option {
@@ -52,12 +65,21 @@ func WithGorm(db *gorm.DB) Option {
 	}
 }
 
-type handlerFn func(handler.Context) error
+func registerRoute(r r, h *handler.Handler) {
+	r.h = h
+	methodFinder := reflect.TypeOf(&r)
+	for i := 0; i < methodFinder.NumMethod(); i++ {
+		method := methodFinder.Method(i)
+		method.Func.Call([]reflect.Value{reflect.ValueOf(&r)})
+	}
+}
 
-func WrapHandler(fn handlerFn) gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		if err := fn(ctx); err != nil {
-			ctx.Set(middleware.FailureKey, err)
-		}
+func addRoute(method string, path string, fn func(handler.Context) (interface{}, error)) rest.GinRoute {
+	return rest.GinRoute{
+		Route: rest.Route{
+			Method: method,
+			Path:   path,
+		},
+		HandlerFn: func(ctx *gin.Context) (interface{}, error) { return fn(ctx) },
 	}
 }

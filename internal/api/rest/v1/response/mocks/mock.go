@@ -10,41 +10,6 @@ import (
 	gomock "github.com/golang/mock/gomock"
 )
 
-// MockContext is a mock of Context interface.
-type MockContext struct {
-	ctrl     *gomock.Controller
-	recorder *MockContextMockRecorder
-}
-
-// MockContextMockRecorder is the mock recorder for MockContext.
-type MockContextMockRecorder struct {
-	mock *MockContext
-}
-
-// NewMockContext creates a new mock instance.
-func NewMockContext(ctrl *gomock.Controller) *MockContext {
-	mock := &MockContext{ctrl: ctrl}
-	mock.recorder = &MockContextMockRecorder{mock}
-	return mock
-}
-
-// EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockContext) EXPECT() *MockContextMockRecorder {
-	return m.recorder
-}
-
-// Set mocks base method.
-func (m *MockContext) Set(key string, obj any) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", key, obj)
-}
-
-// Set indicates an expected call of Set.
-func (mr *MockContextMockRecorder) Set(key, obj interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), key, obj)
-}
-
 // MockDecoder is a mock of Decoder interface.
 type MockDecoder struct {
 	ctrl     *gomock.Controller
