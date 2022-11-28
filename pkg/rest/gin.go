@@ -13,7 +13,7 @@ func defaultSetup() *gin.Engine {
 	engine := gin.Default()
 	engine.Use(gin.CustomRecovery((func(c *gin.Context, recovered interface{}) {
 		c.JSON(http.StatusInternalServerError, map[string]interface{}{
-			"error": fmt.Errorf("panic : %v", recovered),
+			"error": fmt.Sprintf("panic : %v", recovered),
 		})
 	})))
 

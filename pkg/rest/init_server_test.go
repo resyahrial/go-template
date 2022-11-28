@@ -8,11 +8,14 @@ import (
 	"net/http/httptest"
 )
 
-func getResponse(method string, path string, bodyReader io.Reader, fn func(host string) *http.Server) (statusCode int, responseBody map[string]interface{}) {
+func getResponse(method string, path string, bodyReader io.Reader, handler http.Handler) (statusCode int, responseBody map[string]interface{}) {
 	host := "localhost:3000"
 	request := httptest.NewRequest(method, fmt.Sprintf("http://%s%s", host, path), bodyReader)
 	recorder := httptest.NewRecorder()
-	server := fn(host)
+	server := &http.Server{
+		Addr:    host,
+		Handler: handler,
+	}
 	server.Handler.ServeHTTP(recorder, request)
 	response := recorder.Result()
 
