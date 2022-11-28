@@ -1,10 +1,7 @@
 package rest_test
 
 import (
-	"encoding/json"
-	"io"
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -24,20 +21,13 @@ func (s *GinEngineTestSuite) SetupTest() {
 }
 
 func (s *GinEngineTestSuite) TestHealthCheck() {
-	request := httptest.NewRequest(http.MethodGet, "http://localhost:3000/health-check", nil)
-	recorder := httptest.NewRecorder()
-	server := &http.Server{
-		Addr:    "localhost:3000",
-		Handler: rest.InitGinEngine(gin.TestMode),
-	}
-	server.Handler.ServeHTTP(recorder, request)
-	response := recorder.Result()
-	s.Equal(http.StatusOK, response.StatusCode)
-
-	body, err := io.ReadAll(response.Body)
-	s.Nil(err)
-	var responseBody map[string]interface{}
-	json.Unmarshal(body, &responseBody)
-
-	s.Equal("OK", responseBody["message"])
+	code, resBody := getResponse(http.MethodGet, "/health-check", nil, func(host string) *http.Server {
+		return &http.Server{
+			Addr:    host,
+			Handler: rest.InitGinEngine(gin.TestMode),
+		}
+	})
+	s.Equal(http.StatusOK, code)
+	s.NotNil(resBody)
+	s.Equal("OK", resBody["message"])
 }
