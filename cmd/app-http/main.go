@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/resyahrial/go-template/config"
+	"github.com/resyahrial/go-template/internal/api/rest/route"
 	"github.com/resyahrial/go-template/internal/api/rest/server"
 	"github.com/resyahrial/go-template/internal/repo/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
@@ -38,8 +39,13 @@ func main() {
 
 	_ = postgresql.InitDatabase(config.GlobalConfig)
 
+	restServer := server.InitServer(
+		config.GlobalConfig.App.DebugMode,
+	)
+	route.InitRoutes(restServer, route.WithGorm(postgresql.DbInstance))
+
 	graceful.RunHttpServer(context.Background(), &http.Server{
 		Addr:    fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
-		Handler: server.InitServer(postgresql.DbInstance, config.GlobalConfig),
+		Handler: restServer,
 	}, 10*time.Second)
 }

@@ -1,11 +1,8 @@
 package route
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
-	"github.com/resyahrial/go-template/config"
 	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
@@ -15,17 +12,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type RouteOpt struct {
-	Db  *gorm.DB
-	Cfg config.Config
+type option struct {
+	Db *gorm.DB
 }
 
-func InitRoutes(e *gin.Engine, opt RouteOpt) {
-	e.GET("/health-check", func(c *gin.Context) {
-		c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "OK",
-		})
-	})
+type Option func(*option)
+
+func InitRoutes(e *gin.Engine, opts ...Option) {
+	opt := &option{}
+	for _, o := range opts {
+		o(opt)
+	}
 
 	reqConverter := request.NewConverter(
 		&request.ValidatorImpl{
@@ -49,9 +46,15 @@ func InitRoutes(e *gin.Engine, opt RouteOpt) {
 	))
 }
 
-type HandlerFn func(handler.Context) error
+func WithGorm(db *gorm.DB) Option {
+	return func(o *option) {
+		o.Db = db
+	}
+}
 
-func WrapHandler(fn HandlerFn) gin.HandlerFunc {
+type handlerFn func(handler.Context) error
+
+func WrapHandler(fn handlerFn) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if err := fn(ctx); err != nil {
 			ctx.Set(middleware.FailureKey, err)
