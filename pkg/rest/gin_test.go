@@ -3,6 +3,7 @@ package rest_test
 import (
 	"fmt"
 	"net/http"
+	"strings"
 	"testing"
 
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ import (
 
 type GinEngineTestSuite struct {
 	suite.Suite
+	engine *gin.Engine
 }
 
 func TestGinEngine(t *testing.T) {
@@ -19,17 +21,23 @@ func TestGinEngine(t *testing.T) {
 }
 
 func (s *GinEngineTestSuite) SetupTest() {
+	s.engine = rest.InitGinEngine(gin.TestMode)
 }
 
 func (s *GinEngineTestSuite) TestHealthCheck() {
-	code, resBody := getResponse(http.MethodGet, "/health-check", nil, rest.InitGinEngine(gin.TestMode))
+	code, resBody := getResponse(s.engine, withPath("/health-check"))
 	s.Equal(http.StatusOK, code)
 	s.NotNil(resBody)
 	s.Equal("OK", resBody["message"])
 }
 
 func (s *GinEngineTestSuite) TestNoRoute() {
-	code, resBody := getResponse(http.MethodGet, "/unregistered_route", nil, rest.InitGinEngine(gin.TestMode))
+	code, resBody := getResponse(
+		s.engine,
+		withPath("/unregistered_route"),
+		withMethod(http.MethodPost),
+		withBodyReader(strings.NewReader(`{"name" : "Gadget"}`)),
+	)
 	s.Equal(http.StatusInternalServerError, code)
 	s.NotNil(resBody)
 	s.Equal("route not found", resBody["error"])
@@ -37,12 +45,11 @@ func (s *GinEngineTestSuite) TestNoRoute() {
 
 func (s *GinEngineTestSuite) TestPanicRecovery() {
 	panicRoutePath := "/panic-route"
-	engine := rest.InitGinEngine(gin.TestMode)
-	engine.GET(panicRoutePath, func(ctx *gin.Context) {
+	s.engine.GET(panicRoutePath, func(ctx *gin.Context) {
 		emptySlice := make([]string, 0)
 		fmt.Println(emptySlice[0])
 	})
-	code, resBody := getResponse(http.MethodGet, panicRoutePath, nil, engine)
+	code, resBody := getResponse(s.engine, withPath(panicRoutePath))
 	s.Equal(http.StatusInternalServerError, code)
 	s.NotNil(resBody)
 	s.Contains(resBody["error"], "panic")
