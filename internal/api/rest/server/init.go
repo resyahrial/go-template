@@ -24,7 +24,7 @@ func InitServer(db *gorm.DB, cfg config.Config) *gin.Engine {
 	}
 
 	gin.SetMode(ginMode)
-	customMiddleware := middleware.New(middleware.Opts{})
+	customMiddleware := middleware.New()
 
 	engine := gin.Default()
 
