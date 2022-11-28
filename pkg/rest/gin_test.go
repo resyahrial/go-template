@@ -31,3 +31,15 @@ func (s *GinEngineTestSuite) TestHealthCheck() {
 	s.NotNil(resBody)
 	s.Equal("OK", resBody["message"])
 }
+
+func (s *GinEngineTestSuite) TestNoRoute() {
+	code, resBody := getResponse(http.MethodGet, "/unregistered_route", nil, func(host string) *http.Server {
+		return &http.Server{
+			Addr:    host,
+			Handler: rest.InitGinEngine(gin.TestMode),
+		}
+	})
+	s.Equal(http.StatusInternalServerError, code)
+	s.NotNil(resBody)
+	s.Equal("route not found", resBody["error"])
+}
