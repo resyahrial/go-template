@@ -1,6 +1,7 @@
 package rest_test
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -53,4 +54,45 @@ func (s *GinEngineTestSuite) TestPanicRecovery() {
 	s.Equal(http.StatusInternalServerError, code)
 	s.NotNil(resBody)
 	s.Contains(resBody["error"], "panic")
+}
+
+func (s *GinEngineTestSuite) TestGenerateRoute() {
+	engine := rest.InitGinEngine(
+		gin.TestMode,
+		rest.WithDefaultResponseWrapper(),
+		rest.WithRoutes(
+			rest.GinRoute{
+				Route: rest.Route{
+					Method: http.MethodDelete,
+					Path:   "/:id",
+				},
+				HandlerFn: func(*gin.Context) (interface{}, error) {
+					return nil, errors.New("failed to delete")
+				},
+			},
+			rest.GinRoute{
+				Route: rest.Route{
+					Method: http.MethodPost,
+					Path:   "",
+				},
+				HandlerFn: func(*gin.Context) (interface{}, error) {
+					return map[string]interface{}{
+						"id": "id",
+					}, nil
+				},
+			},
+		),
+	)
+
+	code, resBody := getResponse(engine, withMethod(http.MethodDelete), withPath("/1"))
+	s.Equal(http.StatusInternalServerError, code)
+	s.NotNil(resBody)
+	s.Equal(resBody["error"], "failed to delete")
+
+	code, resBody = getResponse(engine, withMethod(http.MethodPost), withPath("/"))
+	s.Equal(http.StatusOK, code)
+	s.NotNil(resBody)
+	s.Equal(resBody["data"], map[string]interface{}{
+		"id": "id",
+	})
 }

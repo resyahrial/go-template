@@ -94,3 +94,25 @@ func WithRoutes(routes ...GinRoute) GinOption {
 		}
 	}
 }
+
+func WithDefaultResponseWrapper(routes ...GinRoute) GinOption {
+	return func(e *gin.Engine) {
+		e.Use(func(ctx *gin.Context) {
+			ctx.Next()
+
+			val, ok := ctx.Get(ResultKey)
+			if !ok {
+				return
+			}
+			if err, ok := val.(error); ok {
+				ctx.JSON(http.StatusInternalServerError, map[string]interface{}{
+					"error": err.Error(),
+				})
+				return
+			}
+			ctx.JSON(http.StatusOK, map[string]interface{}{
+				"data": val,
+			})
+		})
+	}
+}

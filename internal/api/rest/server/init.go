@@ -14,11 +14,11 @@ func InitServer(isDebugMode bool, routes []rest.GinRoute) *gin.Engine {
 	customMiddleware := middleware.New()
 	return rest.InitGinEngine(
 		mode,
-		rest.WithRoutes(routes...),
 		rest.WithCustomMiddlewares(
 			func(ctx *gin.Context) {
 				customMiddleware.ResponseHandler(ctx)
 			},
 		),
+		rest.WithRoutes(routes...),
 	)
 }
