@@ -9,7 +9,6 @@ import (
 	time "time"
 
 	gomock "github.com/golang/mock/gomock"
-	request "github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	entity "github.com/resyahrial/go-template/internal/entity"
 )
 
@@ -37,18 +36,18 @@ func (m *MockRequestConverter) EXPECT() *MockRequestConverterMockRecorder {
 }
 
 // GetCreateUserRequest mocks base method.
-func (m *MockRequestConverter) GetCreateUserRequest(c request.Context) (*entity.User, error) {
+func (m *MockRequestConverter) GetCreateUserRequest(fn func(any) error) (*entity.User, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetCreateUserRequest", c)
+	ret := m.ctrl.Call(m, "GetCreateUserRequest", fn)
 	ret0, _ := ret[0].(*entity.User)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetCreateUserRequest indicates an expected call of GetCreateUserRequest.
-func (mr *MockRequestConverterMockRecorder) GetCreateUserRequest(c interface{}) *gomock.Call {
+func (mr *MockRequestConverterMockRecorder) GetCreateUserRequest(fn interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCreateUserRequest", reflect.TypeOf((*MockRequestConverter)(nil).GetCreateUserRequest), c)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetCreateUserRequest", reflect.TypeOf((*MockRequestConverter)(nil).GetCreateUserRequest), fn)
 }
 
 // MockResponseConverter is a mock of ResponseConverter interface.

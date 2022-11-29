@@ -9,8 +9,3 @@ type Validator interface {
 type Decoder interface {
 	Decode(in, out interface{}) error
 }
-
-//go:generate mockgen -destination=mocks/mock.go -source=adapter.go Context
-type Context interface {
-	BindJSON(obj any) error
-}

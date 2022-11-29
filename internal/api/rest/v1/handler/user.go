@@ -9,7 +9,7 @@ func (h *Handler) CreateUser(c Context) (res interface{}, err error) {
 		user *entity.User
 	)
 
-	if user, err = h.reqConverter.GetCreateUserRequest(c); err != nil {
+	if user, err = h.reqConverter.GetCreateUserRequest(c.BindJSON); err != nil {
 		return
 	}
 
