@@ -9,7 +9,6 @@ import (
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
 	"github.com/resyahrial/go-template/internal/factory"
-	"github.com/resyahrial/go-template/pkg/rest"
 	"github.com/resyahrial/go-template/pkg/validator"
 	"gorm.io/gorm"
 )
@@ -20,43 +19,41 @@ type option struct {
 
 type Option func(*option)
 
-var (
-	routes []rest.GinRoute
-)
-
-type r struct {
-	h *handler.Handler
+type R struct {
+	engine  *gin.Engine
+	handler *handler.Handler
 }
 
-func InitRoutes(opts ...Option) []rest.GinRoute {
-	opt := &option{}
-	for _, o := range opts {
-		o(opt)
+func InitRoutes(opts ...Option) func(*gin.Engine) {
+	return func(engine *gin.Engine) {
+		opt := &option{}
+		for _, o := range opts {
+			o(opt)
+		}
+
+		reqConverter := request.NewConverter(
+			&request.ValidatorImpl{
+				Fn: validator.Validate,
+			},
+			&request.DecoderImpl{
+				Fn: mapstructure.Decode,
+			},
+		)
+
+		resConverter := response.NewConverter(
+			&response.DecoderImpl{
+				Fn: mapstructure.Decode,
+			},
+		)
+
+		handler := handler.NewHandler(
+			reqConverter,
+			resConverter,
+			factory.InitUserUsecase(opt.Db),
+		)
+
+		registerRoute(engine, handler)
 	}
-
-	reqConverter := request.NewConverter(
-		&request.ValidatorImpl{
-			Fn: validator.Validate,
-		},
-		&request.DecoderImpl{
-			Fn: mapstructure.Decode,
-		},
-	)
-
-	resConverter := response.NewConverter(
-		&response.DecoderImpl{
-			Fn: mapstructure.Decode,
-		},
-	)
-
-	handler := handler.NewHandler(
-		reqConverter,
-		resConverter,
-		factory.InitUserUsecase(opt.Db),
-	)
-
-	registerRoute(r{}, handler)
-	return routes
 }
 
 func WithGorm(db *gorm.DB) Option {
@@ -65,8 +62,8 @@ func WithGorm(db *gorm.DB) Option {
 	}
 }
 
-func registerRoute(r r, h *handler.Handler) {
-	r.h = h
+func registerRoute(e *gin.Engine, h *handler.Handler) {
+	r := R{e, h}
 	methodFinder := reflect.TypeOf(&r)
 	for i := 0; i < methodFinder.NumMethod(); i++ {
 		method := methodFinder.Method(i)
@@ -74,12 +71,13 @@ func registerRoute(r r, h *handler.Handler) {
 	}
 }
 
-func addRoute(method string, path string, fn func(handler.Context) (interface{}, error)) rest.GinRoute {
-	return rest.GinRoute{
-		Route: rest.Route{
-			Method: method,
-			Path:   path,
-		},
-		HandlerFn: func(ctx *gin.Context) (interface{}, error) { return fn(ctx) },
+func wrapHandler(fn func(handler.Context) (interface{}, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		res, err := fn(ctx)
+		if err != nil {
+			ctx.Set("Result", err)
+		} else {
+			ctx.Set("Result", res)
+		}
 	}
 }

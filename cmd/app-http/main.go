@@ -39,13 +39,21 @@ func main() {
 
 	_ = postgresql.InitDatabase(config.GlobalConfig)
 
-	graceful.RunHttpServer(context.Background(), &http.Server{
+	svr := &http.Server{
 		Addr: fmt.Sprintf(":%v", config.GlobalConfig.App.ServerAppPort),
-		Handler: server.InitServer(
-			config.GlobalConfig.App.DebugMode,
-			route.InitRoutes(
-				route.WithGorm(postgresql.DbInstance),
-			),
+	}
+
+	serverOpts := []server.Option{
+		route.InitRoutes(
+			route.WithGorm(postgresql.DbInstance),
 		),
-	}, 10*time.Second)
+	}
+
+	if config.GlobalConfig.App.DebugMode {
+		svr.Handler = server.InitServerDebugMode(serverOpts...)
+	} else {
+		svr.Handler = server.InitServerReleaseMode(serverOpts...)
+	}
+
+	graceful.RunHttpServer(context.Background(), svr, 10*time.Second)
 }
