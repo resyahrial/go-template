@@ -11,7 +11,6 @@ import (
 
 type ResponseConverterTestSuite struct {
 	suite.Suite
-	ctx       *mock_response.MockContext
 	decoder   *mock_response.MockDecoder
 	converter *response.Converter
 }
@@ -22,7 +21,6 @@ func TestResponseConverter(t *testing.T) {
 
 func (s *ResponseConverterTestSuite) SetupTest() {
 	ctrl := gomock.NewController(s.T())
-	s.ctx = mock_response.NewMockContext(ctrl)
 	s.decoder = mock_response.NewMockDecoder(ctrl)
 	s.converter = response.NewConverter(
 		s.decoder,

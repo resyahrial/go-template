@@ -1,7 +1,6 @@
 package response
 
 import (
-	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/entity"
 )
 
@@ -10,15 +9,14 @@ type CreateUser struct {
 	Email string
 }
 
-func (e *Converter) SetCreateUserResponse(ctx Context, user *entity.User) (err error) {
+func (e *Converter) GetCreateUserResponse(user *entity.User) (res interface{}, err error) {
 	var (
-		res *CreateUser
+		createUserRes *CreateUser
 	)
 
-	if err = e.decoder.Decode(user, &res); err != nil {
+	if err = e.decoder.Decode(user, &createUserRes); err != nil {
 		return
 	}
 
-	ctx.Set(middleware.SuccessKey, res)
-	return nil
+	return WrapSingleData(createUserRes), err
 }

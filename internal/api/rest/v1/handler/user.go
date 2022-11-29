@@ -4,12 +4,12 @@ import (
 	"github.com/resyahrial/go-template/internal/entity"
 )
 
-func (h *Handler) CreateUser(c Context) (err error) {
+func (h *Handler) CreateUser(c Context) (res interface{}, err error) {
 	var (
 		user *entity.User
 	)
 
-	if user, err = h.reqConverter.GetCreateUserRequest(c); err != nil {
+	if user, err = h.reqConverter.GetCreateUserRequest(c.BindJSON); err != nil {
 		return
 	}
 
@@ -17,9 +17,5 @@ func (h *Handler) CreateUser(c Context) (err error) {
 		return
 	}
 
-	if err = h.resConverter.SetCreateUserResponse(c, user); err != nil {
-		return
-	}
-
-	return
+	return h.resConverter.GetCreateUserResponse(user)
 }

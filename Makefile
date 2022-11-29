@@ -1,7 +1,9 @@
-test-total-coverage: 
+test-cover: 
 	go mod verify\
 	&& go mod download\
-	&& go tool cover -func cover.out
+	&& go test ./... -coverprofile cover.out\
+	&& go tool cover -func cover.out | grep total\
+	&& rm cover.out
 
 # Make task for CI golangci-lint report fo CI sonarscanner
 ci-golangci-lint-report: 

@@ -1,12 +1,10 @@
 package route
 
 import (
-	"net/http"
+	"reflect"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
-	"github.com/resyahrial/go-template/config"
-	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
@@ -15,46 +13,71 @@ import (
 	"gorm.io/gorm"
 )
 
-type RouteOpt struct {
-	Db  *gorm.DB
-	Cfg config.Config
+type option struct {
+	Db *gorm.DB
 }
 
-func InitRoutes(e *gin.Engine, opt RouteOpt) {
-	e.GET("/health-check", func(c *gin.Context) {
-		c.JSON(http.StatusOK, map[string]interface{}{
-			"message": "OK",
-		})
-	})
+type Option func(*option)
 
-	reqConverter := request.NewConverter(
-		&request.ValidatorImpl{
-			Fn: validator.Validate,
-		},
-		&request.DecoderImpl{
-			Fn: mapstructure.Decode,
-		},
-	)
-
-	resConverter := response.NewConverter(
-		&response.DecoderImpl{
-			Fn: mapstructure.Decode,
-		},
-	)
-
-	initV1Route(e, handler.NewHandler(
-		reqConverter,
-		resConverter,
-		factory.InitUserUsecase(opt.Db),
-	))
+type R struct {
+	engine  *gin.Engine
+	handler *handler.Handler
 }
 
-type HandlerFn func(handler.Context) error
+func InitRoutes(opts ...Option) func(*gin.Engine) {
+	return func(engine *gin.Engine) {
+		opt := &option{}
+		for _, o := range opts {
+			o(opt)
+		}
 
-func WrapHandler(fn HandlerFn) gin.HandlerFunc {
+		reqConverter := request.NewConverter(
+			&request.ValidatorImpl{
+				Fn: validator.Validate,
+			},
+			&request.DecoderImpl{
+				Fn: mapstructure.Decode,
+			},
+		)
+
+		resConverter := response.NewConverter(
+			&response.DecoderImpl{
+				Fn: mapstructure.Decode,
+			},
+		)
+
+		handler := handler.NewHandler(
+			reqConverter,
+			resConverter,
+			factory.InitUserUsecase(opt.Db),
+		)
+
+		registerRoute(engine, handler)
+	}
+}
+
+func WithGorm(db *gorm.DB) Option {
+	return func(o *option) {
+		o.Db = db
+	}
+}
+
+func registerRoute(e *gin.Engine, h *handler.Handler) {
+	r := R{e, h}
+	methodFinder := reflect.TypeOf(&r)
+	for i := 0; i < methodFinder.NumMethod(); i++ {
+		method := methodFinder.Method(i)
+		method.Func.Call([]reflect.Value{reflect.ValueOf(&r)})
+	}
+}
+
+func wrapHandler(fn func(handler.Context) (interface{}, error)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		if err := fn(ctx); err != nil {
-			ctx.Set(middleware.FailureKey, err)
+		res, err := fn(ctx)
+		if err != nil {
+			ctx.Set("Result", err)
+		} else {
+			ctx.Set("Result", res)
 		}
 	}
 }

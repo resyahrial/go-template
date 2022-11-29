@@ -6,19 +6,28 @@ import (
 )
 
 type Middleware struct {
+	db  *gorm.DB
+	cfg config.Config
 }
 
-type Opts struct {
-	Db  *gorm.DB
-	Cfg config.Config
-}
+type Option func(*Middleware)
 
-type MiddlewareOptionFn func(*Middleware, Opts)
-
-func New(mOpts Opts, opts ...MiddlewareOptionFn) *Middleware {
+func New(opts ...Option) *Middleware {
 	m := &Middleware{}
 	for _, opt := range opts {
-		opt(m, mOpts)
+		opt(m)
 	}
 	return m
+}
+
+func WithDbInstance(db *gorm.DB) Option {
+	return func(m *Middleware) {
+		m.db = db
+	}
+}
+
+func WithConfig(cfg config.Config) Option {
+	return func(m *Middleware) {
+		m.cfg = cfg
+	}
 }

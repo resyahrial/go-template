@@ -22,5 +22,5 @@ func TestMiddleware(t *testing.T) {
 func (s *MiddlewareTestSuite) SetupTest() {
 	ctrl := gomock.NewController(s.T())
 	s.ctx = mock_middleware.NewMockContext(ctrl)
-	s.m = middleware.New(middleware.Opts{})
+	s.m = middleware.New()
 }

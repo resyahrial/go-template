@@ -11,12 +11,12 @@ type CreateUser struct {
 	Password string `json:"password"`
 }
 
-func (e *Converter) GetCreateUserRequest(ctx Context) (user *entity.User, err error) {
+func (e *Converter) GetCreateUserRequest(fn func(obj any) error) (user *entity.User, err error) {
 	var (
 		req *CreateUser
 	)
 
-	if err = ctx.BindJSON(&req); err != nil {
+	if err = fn(&req); err != nil {
 		return
 	}
 
