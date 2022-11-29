@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	ResultKey    = "ResultKey"
 	SuccessKey   = "SuccessKey"
 	FailureKey   = "FailureKey"
 	PaginatedKey = "PaginatedKey"
@@ -36,23 +37,17 @@ type Failure struct {
 func (m *Middleware) ResponseHandler(ctx Context) {
 	ctx.Next()
 
-	if val, ok := ctx.Get(FailureKey); ok {
-		if err, ok := val.(error); ok {
-			handleError(ctx, err)
-			return
-		}
-	}
-
-	if data, ok := ctx.Get(SuccessKey); ok {
-		if paginatedData, ok := ctx.Get(PaginatedKey); ok {
-			if parsedPaginatedData, ok := paginatedData.(PaginatedResultValue); ok {
-				handleSuccessPaginated(ctx, data, parsedPaginatedData)
-			}
-		} else {
-			handleSuccess(ctx, data)
-		}
+	val, ok := ctx.Get(ResultKey)
+	if !ok {
 		return
 	}
+
+	if err, ok := val.(error); ok {
+		handleError(ctx, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, val)
 }
 
 func handleError(ctx Context, err error) {
@@ -74,30 +69,5 @@ func handleError(ctx Context, err error) {
 
 	ctx.JSON(code, &Failure{
 		ErrorMsg: message,
-	})
-}
-
-func handleSuccess(ctx Context, data interface{}) {
-	ctx.JSON(http.StatusOK, &Success{
-		Data: data,
-	})
-}
-
-func handleSuccessPaginated(ctx Context, data interface{}, paginatedResultValue PaginatedResultValue) {
-	totalPage := 1
-	if paginatedResultValue.Limit < int(paginatedResultValue.Count) {
-		addtional := int(paginatedResultValue.Count) / paginatedResultValue.Limit
-		if int(paginatedResultValue.Count)%paginatedResultValue.Limit == 0 {
-			addtional -= 1
-		}
-		totalPage += addtional
-	}
-	ctx.JSON(http.StatusOK, &Success{
-		Data: data,
-		PageInfo: PageInfo{
-			CurrentPage: paginatedResultValue.Page + 1,
-			TotalPage:   totalPage,
-			Count:       paginatedResultValue.Count,
-		},
 	})
 }

@@ -18,5 +18,5 @@ func (e *Converter) GetCreateUserResponse(user *entity.User) (res interface{}, e
 		return
 	}
 
-	return createUserRes, err
+	return WrapSingleData(createUserRes), err
 }

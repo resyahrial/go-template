@@ -48,7 +48,9 @@ func (s *ResponseConverterTestSuite) TestConvertCreateUser() {
 			res, err := s.converter.GetCreateUserResponse(tc.userEntity)
 			s.Equal(tc.expectedError, err)
 			if tc.expectedError == nil {
-				s.Equal(tc.expectedResult, res)
+				s.Equal(&response.Success{
+					Data: tc.expectedResult,
+				}, res)
 			} else {
 				s.Nil(res)
 			}

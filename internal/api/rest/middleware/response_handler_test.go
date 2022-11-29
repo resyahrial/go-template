@@ -52,7 +52,7 @@ func (s *MiddlewareTestSuite) TestResponseHandlerError() {
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			s.ctx.EXPECT().Next()
-			s.ctx.EXPECT().Get(middleware.FailureKey).Return(tc.mockError, true)
+			s.ctx.EXPECT().Get(middleware.ResultKey).Return(tc.mockError, true)
 			s.ctx.EXPECT().JSON(tc.expectedCode, tc.expectedMessage)
 			s.m.ResponseHandler(s.ctx)
 		})
@@ -63,17 +63,15 @@ func (s *MiddlewareTestSuite) TestResponseHandlerSuccess() {
 	testCases := []struct {
 		name         string
 		mockData     any
-		expectedData *middleware.Success
+		expectedData any
 	}{
 		{
 			name: "success handle success response",
 			mockData: map[string]interface{}{
 				"message": "success",
 			},
-			expectedData: &middleware.Success{
-				Data: map[string]interface{}{
-					"message": "success",
-				},
+			expectedData: map[string]interface{}{
+				"message": "success",
 			},
 		},
 	}
@@ -81,50 +79,7 @@ func (s *MiddlewareTestSuite) TestResponseHandlerSuccess() {
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			s.ctx.EXPECT().Next()
-			s.ctx.EXPECT().Get(middleware.FailureKey).Return(nil, false)
-			s.ctx.EXPECT().Get(middleware.SuccessKey).Return(tc.mockData, true)
-			s.ctx.EXPECT().Get(middleware.PaginatedKey).Return(nil, false)
-			s.ctx.EXPECT().JSON(http.StatusOK, tc.expectedData)
-			s.m.ResponseHandler(s.ctx)
-		})
-	}
-}
-
-func (s *MiddlewareTestSuite) TestResponseHandlerPaginated() {
-	testCases := []struct {
-		name              string
-		mockData          any
-		mockPaginatedData middleware.PaginatedResultValue
-		expectedData      *middleware.Success
-	}{
-		{
-			name: "success handle paginated response",
-			mockData: []struct{ ID string }{
-				{ID: "id"},
-			},
-			mockPaginatedData: middleware.PaginatedResultValue{
-				Page:  0,
-				Limit: 10,
-				Count: 1,
-			},
-			expectedData: &middleware.Success{
-				Data: []struct{ ID string }{
-					{ID: "id"},
-				},
-				PageInfo: middleware.PageInfo{
-					CurrentPage: 1,
-					TotalPage:   1,
-					Count:       1,
-				}},
-		},
-	}
-
-	for _, tc := range testCases {
-		s.Run(tc.name, func() {
-			s.ctx.EXPECT().Next()
-			s.ctx.EXPECT().Get(middleware.FailureKey).Return(nil, false)
-			s.ctx.EXPECT().Get(middleware.SuccessKey).Return(tc.mockData, true)
-			s.ctx.EXPECT().Get(middleware.PaginatedKey).Return(tc.mockPaginatedData, true)
+			s.ctx.EXPECT().Get(middleware.ResultKey).Return(tc.mockData, true)
 			s.ctx.EXPECT().JSON(http.StatusOK, tc.expectedData)
 			s.m.ResponseHandler(s.ctx)
 		})
