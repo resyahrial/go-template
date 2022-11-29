@@ -3,6 +3,7 @@ package handler_test
 import (
 	"errors"
 
+	"github.com/golang/mock/gomock"
 	"github.com/resyahrial/go-template/internal/entity"
 )
 
@@ -60,7 +61,7 @@ func (s *HandlerTestSuite) TestCreateUser() {
 
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
-			s.reqConverter.EXPECT().GetCreateUserRequest(s.ctx).Return(tc.mockUserEntity, tc.mockReqConverterError)
+			s.reqConverter.EXPECT().GetCreateUserRequest(gomock.Any()).Return(tc.mockUserEntity, tc.mockReqConverterError)
 			if tc.mockReqConverterError == nil {
 				s.userUsecase.EXPECT().CreateUser(s.ctx, tc.mockUserEntity).Return(tc.mockUserEntity, tc.mockUsecaseError)
 				if tc.mockUsecaseError == nil {
