@@ -49,7 +49,6 @@ func (s *ExceptionTestSuite) TestNewException() {
 				Module:  "USER",
 			},
 		},
-
 		{
 			name: "should create exception with collection message",
 			inputCollectionMessage: map[string][]string{
@@ -72,7 +71,6 @@ func (s *ExceptionTestSuite) TestNewException() {
 	}
 
 	for _, tc := range testCases {
-
 		s.Run(tc.name, func() {
 			exc := exception.NewBaseException(tc.inputStatusCode).SetModule(tc.inputModule)
 			if len(tc.inputCollectionMessage) > 0 {
@@ -83,6 +81,42 @@ func (s *ExceptionTestSuite) TestNewException() {
 				s.Equal(tc.inputMessage, exc.Error())
 			}
 			s.EqualValues(tc.expectedOutput, exc)
+		})
+	}
+}
+
+func (s *ExceptionTestSuite) TestNewExceptionDerivativeFunction() {
+	testCases := []struct {
+		name         string
+		derivativeFn func() *exception.Base
+		expectedCode int
+	}{
+		{
+			name:         "should create authentication exception",
+			derivativeFn: exception.NewAuthenticationException,
+			expectedCode: http.StatusForbidden,
+		},
+		{
+			name:         "should create authorization exception",
+			derivativeFn: exception.NewAuthorizationException,
+			expectedCode: http.StatusUnauthorized,
+		},
+		{
+			name:         "should create bad request exception",
+			derivativeFn: exception.NewBadRequestException,
+			expectedCode: http.StatusBadRequest,
+		},
+		{
+			name:         "should create not found exception",
+			derivativeFn: exception.NewNotFoundException,
+			expectedCode: http.StatusNotFound,
+		},
+	}
+
+	for _, tc := range testCases {
+		s.Run(tc.name, func() {
+			exc := tc.derivativeFn().SetMessage("derivative")
+			s.Equal(tc.expectedCode, exc.Code)
 		})
 	}
 }
