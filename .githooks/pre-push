@@ -1,0 +1,45 @@
+#!/bin/sh
+
+coverage_threshold=90
+
+CheckCoverage () {
+  coverage=$(awk '{print substr($3, 1, length($3)-1)}')
+  return "$(echo "$coverage < $coverage_threshold" | bc)"
+}
+
+printf "===========\n"
+printf "Checking current git status...\n"
+printf "Did you forget to commit anything?\n"
+printf "Is it in the correct branch?\n"
+printf "===========\n"
+
+git status
+
+printf "Waiting."
+sleep 1
+printf "."
+sleep 1
+printf "."
+sleep 1
+printf ".\n"
+
+printf "===========\n"
+printf "Testing..\n"
+go test -failfast -coverprofile cover.out ./... -count=1
+if [ $? == 1 ]; then
+  printf "\nFailed to push: Test is failed\n"
+  rm cover.out
+  exit
+fi
+
+go tool cover -func cover.out | grep total | CheckCoverage
+if [ $? == 1 ]; then
+  printf "\nFailed to push: Test coverage less than threshold - %s" $coverage_threshold
+  rm cover.out
+  exit
+fi
+rm cover.out
+printf "Test OK\n"
+
+printf "===========\n"
+printf "Pushing..\n"
