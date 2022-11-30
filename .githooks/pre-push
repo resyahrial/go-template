@@ -4,6 +4,7 @@ coverage_threshold=90
 
 CheckCoverage () {
   coverage=$(awk '{print substr($3, 1, length($3)-1)}')
+  printf "Coverage: %s" $coverage
   return "$(echo "$coverage < $coverage_threshold" | bc)"
 }
 
@@ -29,14 +30,14 @@ go test -failfast -coverprofile cover.out ./... -count=1
 if [ $? == 1 ]; then
   printf "\nFailed to push: Test is failed\n"
   rm cover.out
-  exit
+  exit 1
 fi
 
 go tool cover -func cover.out | grep total | CheckCoverage
 if [ $? == 1 ]; then
-  printf "\nFailed to push: Test coverage less than threshold - %s" $coverage_threshold
+  printf "\nFailed to push: Test coverage less than threshold - %s\n" $coverage_threshold
   rm cover.out
-  exit
+  exit 1
 fi
 rm cover.out
 printf "Test OK\n"
