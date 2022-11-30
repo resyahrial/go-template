@@ -29,17 +29,14 @@ printf "Testing..\n"
 go test -failfast -coverprofile cover.out ./... -count=1
 if [ $? == 1 ]; then
   printf "\nFailed to push: Test is failed\n"
-  rm cover.out
   exit 1
 fi
 
 go tool cover -func cover.out | grep total | CheckCoverage
 if [ $? == 1 ]; then
   printf "\nFailed to push: Test coverage less than threshold - %s\n" $coverage_threshold
-  rm cover.out
   exit 1
 fi
-rm cover.out
 printf "Test OK\n"
 
 printf "===========\n"
