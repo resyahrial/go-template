@@ -1,9 +1,8 @@
 test-cover: 
-	go mod verify\
-	&& go mod download\
-	&& go test ./... -coverprofile cover.out\
-	&& go tool cover -func cover.out | grep total\
-	&& rm cover.out
+	go test -failfast -coverprofile cover.out
+
+display-test-cover:
+	go tool cover -html cover.out
 
 # Make task for CI golangci-lint report fo CI sonarscanner
 ci-golangci-lint-report: 
