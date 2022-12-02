@@ -51,6 +51,26 @@ func (l *zapLoggerWrapper) Debug(message string, setKeyValues ...SetKeyValueFn) 
 	l.log.Debug(message, l.extractFields(setKeyValues...)...)
 }
 
+func (l *zapLoggerWrapper) Info(message string, setKeyValues ...SetKeyValueFn) {
+	l.log.Info(message, l.extractFields(setKeyValues...)...)
+}
+
+func (l *zapLoggerWrapper) Warn(message string, setKeyValues ...SetKeyValueFn) {
+	l.log.Warn(message, l.extractFields(setKeyValues...)...)
+}
+
+func (l *zapLoggerWrapper) Error(message string, setKeyValues ...SetKeyValueFn) {
+	l.log.Error(message, l.extractFields(setKeyValues...)...)
+}
+
+func (l *zapLoggerWrapper) Panic(message string, setKeyValues ...SetKeyValueFn) {
+	l.log.Panic(message, l.extractFields(setKeyValues...)...)
+}
+
+func (l *zapLoggerWrapper) Fatal(message string, setKeyValues ...SetKeyValueFn) {
+	l.log.Fatal(message, l.extractFields(setKeyValues...)...)
+}
+
 func (l *zapLoggerWrapper) extractFields(setKeyValues ...SetKeyValueFn) []zap.Field {
 	fields := make([]zap.Field, 0)
 	for _, setKeyValue := range setKeyValues {
