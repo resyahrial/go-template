@@ -1,14 +1,16 @@
-version: "3.2"
+version: "3.9"
 
 services:
   postgresql:
-    image: postgres:14.1-alpine
+    container_name: pg-go-template
+    image: postgres:14-alpine
     restart: always
     environment:
+      - POSTGRES_DB=go_template
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
