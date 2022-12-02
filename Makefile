@@ -5,7 +5,7 @@ display-test-cover:
 	go tool cover -html cover.out
 
 # Make task for CI golangci-lint report fo CI sonarscanner
-ci-golangci-lint-report: 
+lint: 
 	go mod verify\
 	&& go mod download\
 	&& wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.47.1\
