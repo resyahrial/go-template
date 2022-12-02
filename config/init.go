@@ -2,10 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -25,7 +25,7 @@ var (
 
 func InitConfig(env string) {
 	if err := cleanenv.ReadConfig(getConfigPath(env), &GlobalConfig); err != nil {
-		logrus.Fatalf("Failed to read config: %v", err)
+		log.Fatalf("Failed to read config: %v", err)
 		os.Exit(2)
 	}
 }
