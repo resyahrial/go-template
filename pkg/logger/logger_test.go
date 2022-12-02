@@ -13,3 +13,9 @@ type LoggerTestSuite struct {
 func TestLogger(t *testing.T) {
 	suite.Run(t, new(LoggerTestSuite))
 }
+
+var (
+	fieldTester = struct {
+		Foo string `json:"foo"`
+	}{"bar"}
+)

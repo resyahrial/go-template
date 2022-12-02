@@ -21,8 +21,17 @@ func (s *LoggerTestSuite) TestZapLogger() {
 	)
 
 	logger.Debug("debug")
-	s.Equal(observedLogs.Len(), 1)
+	logger.Debug("debug with field", logger.WithKeyValue("foo", "bar"))
+	s.Equal(observedLogs.Len(), 2)
 	logs := observedLogs.All()
 	s.Equal("debug", logs[0].Message)
 	s.Equal(zapcore.DebugLevel, logs[0].Level)
+	s.Equal("debug with field", logs[1].Message)
+	s.ElementsMatch([]zap.Field{
+		{
+			Key:    "foo",
+			Type:   zapcore.StringType,
+			String: "bar",
+		},
+	}, logs[1].Context)
 }
