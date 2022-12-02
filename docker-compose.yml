@@ -1,14 +1,30 @@
-version: "3.2"
+version: "3.9"
 
 services:
+  service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: template_service
+    environment:
+      DB_HOST: postgresql:5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: go_template
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
   postgresql:
-    image: postgres:14.1-alpine
+    container_name: pg-go-template
+    image: postgres:14-alpine
     restart: always
     environment:
+      - POSTGRES_DB=go_template
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
