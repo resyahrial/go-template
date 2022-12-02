@@ -47,6 +47,14 @@ func WithCore(core zapcore.Core) ZapLoggerOption {
 	}
 }
 
+func ZapLoggerReleaseModeCore() zapcore.Core {
+	return zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		os.Stdout,
+		zap.NewAtomicLevelAt(zapcore.InfoLevel),
+	)
+}
+
 func (l *zapLoggerWrapper) Debug(message string, setKeyValues ...SetKeyValueFn) {
 	l.log.Debug(message, l.extractFields(setKeyValues...)...)
 }

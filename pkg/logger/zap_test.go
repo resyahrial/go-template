@@ -80,3 +80,18 @@ func (s *LoggerTestSuite) TestZapLoggerFatal() {
 
 	logger.Fatal("fatal")
 }
+
+func (s *LoggerTestSuite) TestZapLoggerReleaseMode() {
+	observedZapCore, observedLogs := observer.New(zapcore.InfoLevel)
+	baseCore := logger.ZapLoggerReleaseModeCore()
+	logger.UseZapLogger(
+		logger.WithCore(zapcore.NewTee(baseCore, observedZapCore)),
+	)
+
+	logger.Debug("debug")
+	logger.Info("info")
+	s.Equal(observedLogs.Len(), 1)
+	logs := observedLogs.All()
+	s.Equal("info", logs[0].Message)
+	s.Equal(zapcore.InfoLevel, logs[0].Level)
+}
