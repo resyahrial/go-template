@@ -38,5 +38,5 @@ jobs:
         with:
           go-version: ${{ env.go_version }}
 
-      - name: Run Test Coverage
+      - name: Run Lint
         run: make lint
