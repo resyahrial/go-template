@@ -12,6 +12,7 @@ import (
 	"github.com/resyahrial/go-template/internal/api/rest/server"
 	"github.com/resyahrial/go-template/internal/repo/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
+	"github.com/resyahrial/go-template/pkg/logger"
 )
 
 type (
@@ -36,6 +37,14 @@ func init() {
 func main() {
 	flag.Parse()
 	config.InitConfig(appFlag.Environment)
+
+	if !config.GlobalConfig.App.DebugMode {
+		logger.UseZapLogger(
+			logger.WithCore(
+				logger.ZapLoggerReleaseModeCore(),
+			),
+		)
+	}
 
 	_ = postgresql.InitDatabase(config.GlobalConfig)
 

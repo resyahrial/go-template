@@ -1,5 +1,5 @@
 test-cover: 
-	go test -failfast -coverprofile cover.out
+	go test -failfast -coverprofile cover.out ./...
 
 display-test-cover:
 	go tool cover -html cover.out
