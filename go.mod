@@ -3,15 +3,14 @@ module github.com/resyahrial/go-template
 go 1.18
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/golang/mock v1.6.0
-	github.com/sirupsen/logrus v1.9.0
 )
 
 require (
-	bou.ke/monkey v1.0.2 // indirect
 	github.com/BurntSushi/toml v1.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
