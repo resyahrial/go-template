@@ -94,7 +94,7 @@ components:
         password:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: required,alphanum,len=8
+            validate: required,alphanum,min=8
   responses:
     ErrorNotFound:
       description: 'not found error'

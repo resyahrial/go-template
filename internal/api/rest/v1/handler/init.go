@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
+	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 	v1 "github.com/resyahrial/go-template/internal/api/rest/v1"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/response"
@@ -26,9 +27,9 @@ type Handler struct {
 
 func (h *Handler) wrapHandler(ctx *gin.Context, res interface{}, err error) {
 	if err != nil {
-		ctx.Set("Result", err)
+		ctx.Set(middleware.ResultKey, err)
 	} else {
-		ctx.Set("Result", res)
+		ctx.Set(middleware.ResultKey, res)
 	}
 }
 

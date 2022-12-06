@@ -23,7 +23,7 @@ type User struct {
 type UserCreate struct {
 	Email    *string `json:"email,omitempty" validate:"required,email"`
 	Name     *string `json:"name,omitempty" validate:"required"`
-	Password *string `json:"password,omitempty" validate:"required,alphanum,len=8"`
+	Password *string `json:"password,omitempty" validate:"required,alphanum,min=8"`
 }
 
 // UserID defines model for UserID.

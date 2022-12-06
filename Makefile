@@ -14,10 +14,3 @@ lint:
 wire-inject:
 	cd internal/factory; \
 	wire
-
-generate-rest:
-	cd internal/api/rest/v1; \
-	oapi-codegen -config types.cfg.yml docs.yml
-
-	cd internal/api/rest/v1; \
-	oapi-codegen -config server.cfg.yml docs.yml

@@ -9,6 +9,7 @@ import (
 
 	"github.com/resyahrial/go-template/config"
 	"github.com/resyahrial/go-template/internal/api/rest/server"
+	v1 "github.com/resyahrial/go-template/internal/api/rest/v1"
 	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/repo/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
@@ -53,6 +54,7 @@ func main() {
 	}
 
 	serverOpts := []server.Option{
+		v1.WithSwagger(),
 		handler.New(
 			handler.WithGorm(postgresql.DbInstance),
 		),

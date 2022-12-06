@@ -21,6 +21,7 @@ require (
 	github.com/go-openapi/swag v0.21.1 // indirect
 	github.com/goccy/go-json v0.9.11 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/invopop/yaml v0.1.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.13.0 // indirect
@@ -57,6 +58,7 @@ require (
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/google/wire v0.5.0
 	github.com/ilyakaznacheev/cleanenv v1.3.0
