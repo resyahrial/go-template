@@ -71,6 +71,23 @@ git config core.hooksPath .githooks
 chmod +x .githooks/*
 ```
 
+### Install air
+
+Air is tool for live reloading our Go's app. Please visit [its documentation](https://github.com/cosmtrek/air) for detail usage.
+
+```
+go install github.com/cosmtrek/air@latest
+```
+
+### Install oapi-codegen
+
+oapi-codegen is for generate boilerplate code to construct rest server. It's generate Open API 3.0 spec to Go's file.
+Please visit [its documentation](https://github.com/deepmap/oapi-codegen) for detail usage, and [OpenAPI Specification](https://swagger.io/specification/) for how to construct the documentation
+
+```
+go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+```
+
 ## Getting Started with the Service Locally
 
 ### Making Database Migration
@@ -174,5 +191,4 @@ For better visualization, current application looks like the diagram below:
 Code generation is used for mundane code task that takes a lot of time. Using code generation reduce the amount of time to create additional boilerplate code. Currently, this project use few code generation library:
 
 1. [Mocking w/ mockgen](https://github.com/golang/mock)
-
-There are special sections for our generated code that SHOULD NOT be edited manually by developers. It should only be edited by another action from the code generator.
+2. [Generate Rest API boilerpate w/ oapi-codegen](https://github.com/deepmap/oapi-codegen)
