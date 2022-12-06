@@ -19,11 +19,14 @@ Boilerplate for go project
 - [x] Validator Package (validator/v10)
 - [x] Error Structure
 - [x] Unit Testing (testify/suite)
-- [ ] Logger
-- [ ] Documentation
-- [ ] CI/CD Workflow
+- [x] Logger
+- [x] Documentation (OApi 3.0)
+- [x] CI/CD Workflow
 - [ ] Tracing
 - [ ] Deployment
+  - [x] Local (Air, Go run)
+  - [x] Containerize (Docker)
+  - [ ] Cloud service
 
 ## Setup
 
