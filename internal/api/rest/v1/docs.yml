@@ -1,0 +1,133 @@
+openapi: "3.0.0"
+
+info:
+  title: Go-Template
+  version: 1.0.0
+  description: Template for go project
+  contact:
+    name: Rangga Eki Syahrial
+    email: syahrialrangga11@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: http://localhost:{port}/api/v1
+    description: api server
+    variables:
+      port:
+        default: "8080"
+        enum:
+          - "8080"
+
+paths:
+  /users:
+    post:
+      tags:
+        - Users
+      description: Creates a new user.
+      operationId: createUser
+      requestBody:
+        description: Create new user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCreate"
+      responses:
+        "200":
+          $ref: "#/components/responses/UserResponse"
+        "400":
+          $ref: "#/components/responses/ErrorValidation"
+        "500":
+          $ref: "#/components/responses/ErrorUnexpected"
+  /users/{userID}:
+    get:
+      tags:
+        - Users
+      description: Get User by ID
+      operationId: getUserByID
+      parameters: 
+        - $ref: "#/components/parameters/UserID"
+      responses:
+        "200":
+          $ref: "#/components/responses/UserResponse"
+        "404":
+          $ref: "#/components/responses/ErrorNotFound"
+        "500":
+          $ref: "#/components/responses/ErrorUnexpected"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+    UserCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        email:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,email
+        password:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required,alphanum,min=8
+  responses:
+    ErrorNotFound:
+      description: 'not found error'
+      content:
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/Error"
+    ErrorUnexpected:
+      description: 'unexpected error'
+      content:
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/Error"
+    ErrorValidation:
+      description: 'validation error'
+      content:
+        application/json:
+          schema: 
+            $ref: "#/components/schemas/Errors"
+    UserResponse:
+      description: 'single user response'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data: 
+                $ref: "#/components/schemas/User"
+  parameters:
+    UserID:
+      name: userID
+      in: path
+      required: true
+      description: "user ID"
+      schema:
+        type: string

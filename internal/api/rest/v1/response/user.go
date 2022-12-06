@@ -1,22 +1,18 @@
 package response
 
 import (
+	v1 "github.com/resyahrial/go-template/internal/api/rest/v1"
 	"github.com/resyahrial/go-template/internal/entity"
 )
 
-type CreateUser struct {
-	Name  string
-	Email string
-}
-
 func (e *Converter) GetCreateUserResponse(user *entity.User) (res interface{}, err error) {
 	var (
-		createUserRes *CreateUser
+		userModel *v1.User
 	)
 
-	if err = e.decoder.Decode(user, &createUserRes); err != nil {
+	if err = e.decoder.Decode(user, &userModel); err != nil {
 		return
 	}
 
-	return WrapSingleData(createUserRes), err
+	return WrapSingleData(userModel), nil
 }

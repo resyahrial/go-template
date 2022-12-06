@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/resyahrial/go-template/internal/api/rest/middleware"
 )
@@ -36,6 +37,12 @@ func initServer(opts ...Option) *gin.Engine {
 	customMiddleware := middleware.New()
 	engine.Use(
 		customRecovery,
+		cors.New(cors.Config{
+			AllowOrigins:  []string{"*"},
+			AllowMethods:  []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+			AllowHeaders:  []string{"Origin", "Authorization", "Content-Type"},
+			ExposeHeaders: []string{"*"},
+		}),
 		func(ctx *gin.Context) { customMiddleware.ResponseHandler(ctx) },
 	)
 

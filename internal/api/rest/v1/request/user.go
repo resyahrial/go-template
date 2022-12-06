@@ -1,19 +1,14 @@
 package request
 
 import (
+	v1 "github.com/resyahrial/go-template/internal/api/rest/v1"
 	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
-type CreateUser struct {
-	Name     string `json:"name"`
-	Email    string `json:"email" validate:"email"`
-	Password string `json:"password"`
-}
-
 func (e *Converter) GetCreateUserRequest(fn func(obj any) error) (user *entity.User, err error) {
 	var (
-		req *CreateUser
+		req *v1.UserCreate
 	)
 
 	if err = fn(&req); err != nil {
