@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/resyahrial/go-template/config"
-	"github.com/resyahrial/go-template/internal/api/rest/route"
 	"github.com/resyahrial/go-template/internal/api/rest/server"
+	"github.com/resyahrial/go-template/internal/api/rest/v1/handler"
 	"github.com/resyahrial/go-template/internal/repo/postgresql"
 	"github.com/resyahrial/go-template/pkg/graceful"
 	"github.com/resyahrial/go-template/pkg/logger"
@@ -53,8 +53,8 @@ func main() {
 	}
 
 	serverOpts := []server.Option{
-		route.InitRoutes(
-			route.WithGorm(postgresql.DbInstance),
+		handler.New(
+			handler.WithGorm(postgresql.DbInstance),
 		),
 	}
 

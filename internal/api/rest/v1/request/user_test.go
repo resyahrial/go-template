@@ -3,15 +3,20 @@ package request_test
 import (
 	"errors"
 
-	"github.com/resyahrial/go-template/internal/api/rest/v1/request"
+	v1 "github.com/resyahrial/go-template/internal/api/rest/v1"
 	"github.com/resyahrial/go-template/internal/entity"
 	"github.com/resyahrial/go-template/pkg/exception"
 )
 
 func (s *RequestConverterTestSuite) TestConvertCreateUser() {
+	user := &entity.User{
+		Name:     "user",
+		Email:    "user@mail.com",
+		Password: "anypassword",
+	}
 	testCases := []struct {
 		name               string
-		createUserRequest  *request.CreateUser
+		createUserRequest  *v1.UserCreate
 		mockBindJSONError  error
 		mockValidateResult map[string][]string
 		mockDecodeError    error
@@ -20,33 +25,29 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 	}{
 		{
 			name: "should success get create user request",
-			createUserRequest: &request.CreateUser{
-				Name:     "user",
-				Email:    "user@mail.com",
-				Password: "anypassword",
+			createUserRequest: &v1.UserCreate{
+				Email:    &user.Email,
+				Name:     &user.Name,
+				Password: &user.Password,
 			},
-			expectedResult: &entity.User{
-				Name:     "user",
-				Email:    "user@mail.com",
-				Password: "anypassword",
-			},
+			expectedResult: user,
 		},
 		{
 			name: "should return error when occure error on decode request",
-			createUserRequest: &request.CreateUser{
-				Name:     "user",
-				Email:    "user@mail.com",
-				Password: "anypassword",
+			createUserRequest: &v1.UserCreate{
+				Email:    &user.Email,
+				Name:     &user.Name,
+				Password: &user.Password,
 			},
 			mockDecodeError: errors.New("failed to decode request"),
 			expectedError:   errors.New("failed to decode request"),
 		},
 		{
 			name: "should return error when occure error on validate request",
-			createUserRequest: &request.CreateUser{
-				Name:     "user",
-				Email:    "user@mail.com",
-				Password: "anypassword",
+			createUserRequest: &v1.UserCreate{
+				Email:    &user.Email,
+				Name:     &user.Name,
+				Password: &user.Password,
 			},
 			mockValidateResult: map[string][]string{
 				"email": {"invalid email"},
@@ -65,7 +66,7 @@ func (s *RequestConverterTestSuite) TestConvertCreateUser() {
 	for _, tc := range testCases {
 		s.Run(tc.name, func() {
 			var (
-				req    *request.CreateUser
+				req    *v1.UserCreate
 				entity *entity.User
 			)
 			reqBinderFn := requestBinderFnStub(&req, &tc.createUserRequest, tc.mockBindJSONError)
